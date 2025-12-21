@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { NewIntegrationModal } from "@/components/projects/NewIntegrationModal";
@@ -11,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleNewIntegration = (data: { repoPath: string; llmConfigId: string; overwrite: boolean }) => {
     toast({
@@ -25,13 +27,11 @@ const Index = () => {
       title: "Re-running Documentation",
       description: `Started documentation generation for ${project?.name}`,
     });
+    navigate(`/progress/${projectId}`);
   };
 
   const handleViewProgress = (projectId: string) => {
-    toast({
-      title: "View Progress",
-      description: "Navigating to progress view...",
-    });
+    navigate(`/progress/${projectId}`);
   };
 
   const handleViewDocs = (projectId: string) => {
