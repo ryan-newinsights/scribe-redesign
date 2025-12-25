@@ -71,7 +71,11 @@ export function Header() {
         </nav>
 
         {/* User Menu */}
-        <div className="flex items-center gap-4 ml-auto">
+        <div className="flex items-center gap-3 ml-auto">
+          <div className="hidden sm:flex flex-col items-end">
+            <span className="text-sm font-medium">User</span>
+            <span className="text-xs text-muted-foreground">user@example.com</span>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
