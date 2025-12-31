@@ -10,6 +10,7 @@ interface ProjectCardProps {
   onRerun: (projectId: string) => void;
   onViewProgress: (projectId: string) => void;
   onViewDocs: (projectId: string) => void;
+  onTitleClick?: (projectId: string) => void;
 }
 
 const statusConfig: Record<JobStatus | 'new', { label: string; className: string }> = {
@@ -35,18 +36,30 @@ const statusConfig: Record<JobStatus | 'new', { label: string; className: string
   },
 };
 
-export function ProjectCard({ project, onRerun, onViewProgress, onViewDocs }: ProjectCardProps) {
+export function ProjectCard({ project, onRerun, onViewProgress, onViewDocs, onTitleClick }: ProjectCardProps) {
   const status = project.latestJob?.status || 'new';
   const { label, className } = statusConfig[status];
   const hasCompletedRun = project.latestJob?.status === 'completed';
   const isRunning = project.latestJob?.status === 'running';
+
+  const handleTitleClick = () => {
+    if (hasCompletedRun && onTitleClick) {
+      onTitleClick(project.id);
+    }
+  };
 
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5">
         {/* Row 1: Title + Status Badge */}
         <div className="flex justify-between items-start mb-3 gap-2">
-          <h3 className="text-lg font-bold text-foreground truncate flex-1">
+          <h3 
+            className={cn(
+              "text-lg font-bold text-foreground truncate flex-1",
+              hasCompletedRun && "cursor-pointer hover:text-primary transition-colors"
+            )}
+            onClick={handleTitleClick}
+          >
             {project.name}
           </h3>
           <Badge variant="secondary" className={cn("shrink-0 font-medium", className)}>
