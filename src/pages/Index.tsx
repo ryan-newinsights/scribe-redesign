@@ -35,11 +35,7 @@ const Index = () => {
   };
 
   const handleViewDocs = (projectId: string) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Opening Documentation",
-      description: `Opening docs for ${project?.name}`,
-    });
+    navigate(`/docs/${projectId}`);
   };
 
   return (
@@ -62,6 +58,7 @@ const Index = () => {
             onRerun={handleRerun}
             onViewProgress={handleViewProgress}
             onViewDocs={handleViewDocs}
+            onTitleClick={handleViewDocs}
           />
         ))}
       </div>
