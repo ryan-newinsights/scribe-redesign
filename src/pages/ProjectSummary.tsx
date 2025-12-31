@@ -153,6 +153,30 @@ const ProjectSummary = () => {
                 </CardContent>
               </Card>
 
+              {/* Download Files */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Download Files</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {mockDocumentFiles.map((file) => (
+                    <div key={file.id} className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium">{file.name}</p>
+                        <p className="text-xs text-muted-foreground">{file.description}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDownloadFile(file.name)}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
               {/* Agent Statistics */}
               <Card>
                 <CardHeader>
@@ -178,29 +202,6 @@ const ProjectSummary = () => {
                 </CardContent>
               </Card>
 
-              {/* Download Files */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Download Files</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {mockDocumentFiles.map((file) => (
-                    <div key={file.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium">{file.name}</p>
-                        <p className="text-xs text-muted-foreground">{file.description}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDownloadFile(file.name)}
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
             </div>
           </div>
         </TabsContent>
