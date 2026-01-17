@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Check, ArrowLeft, RefreshCw } from "lucide-react";
+import { Download, Check, ArrowLeft } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -44,14 +44,6 @@ const ProjectSummary = () => {
     });
   };
 
-  const handleRerun = () => {
-    toast({
-      title: "Re-running Documentation",
-      description: `Started documentation generation for ${summary.projectName}`,
-    });
-    navigate(`/progress/${projectId}`);
-  };
-
   return (
     <Layout>
       {/* Header */}
@@ -60,16 +52,10 @@ const ProjectSummary = () => {
           <h1 className="text-2xl font-bold">Documentation Review</h1>
           <p className="text-muted-foreground">{summary.projectName}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleRerun}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Re-run
-          </Button>
-          <Button onClick={handleDownloadAll}>
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-        </div>
+        <Button onClick={handleDownloadAll}>
+          <Download className="h-4 w-4 mr-2" />
+          Export
+        </Button>
       </div>
 
       {/* Tabs */}
