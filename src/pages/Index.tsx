@@ -13,14 +13,12 @@ import {
   GitHubPermissionModal,
   GitHubProjectCard,
   ProcessingStateCard,
-  NewProjectModal,
   DuplicateRepositoryModal,
 } from "@/components/github";
-import { mockGitHubConnection, mockGitHubRepositories, mockConnectedGitHubUser } from "@/data/mockGitHubData";
+import { mockGitHubConnection, mockGitHubRepositories } from "@/data/mockGitHubData";
 
 const Index = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
   const [gitHubConnected, setGitHubConnected] = useState(!!mockGitHubConnection);
@@ -41,19 +39,17 @@ const Index = () => {
     });
   };
 
-  const handleSelectRepository = (repoId: string) => {
-    const repo = mockGitHubRepositories.find(r => r.id === repoId);
-    if (repo?.isConnected) {
+  const handleConnectRepository = (repo: { fullName: string; isConnected?: boolean }) => {
+    if (repo.isConnected) {
       setDuplicateModalOpen(true);
     } else {
-      setNewProjectModalOpen(false);
-      setProcessingRepo(repo?.fullName || null);
-      // Simulate processing completion
+      setModalOpen(false);
+      setProcessingRepo(repo.fullName);
       setTimeout(() => {
         setProcessingRepo(null);
         toast({
           title: "Documentation Generated",
-          description: `Documentation for ${repo?.fullName} has been generated.`,
+          description: `Documentation for ${repo.fullName} has been generated.`,
         });
       }, 5000);
     }
@@ -104,18 +100,10 @@ const Index = () => {
       {/* Section Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Projects</h1>
-        <div className="flex gap-2">
-          {gitHubConnected && (
-            <Button variant="outline" onClick={() => setNewProjectModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              New from GitHub
-            </Button>
-          )}
-          <Button onClick={() => setModalOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            New Integration
-          </Button>
-        </div>
+        <Button onClick={() => setModalOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          New Integration
+        </Button>
       </div>
 
       {/* Projects Grid */}
@@ -163,41 +151,21 @@ const Index = () => {
         <RecentDocumentsTable documents={mockRecentDocuments} />
       </div>
 
-      {/* Modals */}
       <NewIntegrationModal
         open={modalOpen}
         onOpenChange={setModalOpen}
         llmConfigs={mockLLMConfigs}
         onSubmit={handleNewIntegration}
+        isGitHubConnected={gitHubConnected}
+        repositories={mockGitHubRepositories}
+        onConnectGitHub={handleConnectGitHub}
+        onConnectRepository={handleConnectRepository}
       />
 
       <GitHubPermissionModal
         open={permissionModalOpen}
         onOpenChange={setPermissionModalOpen}
         onAuthorize={handleAuthorizeGitHub}
-      />
-
-      <NewProjectModal
-        open={newProjectModalOpen}
-        onOpenChange={setNewProjectModalOpen}
-        repositories={mockGitHubRepositories}
-        isGitHubConnected={gitHubConnected}
-        onConnectGitHub={handleConnectGitHub}
-        onConnectRepository={(repo) => {
-          if (repo.isConnected) {
-            setDuplicateModalOpen(true);
-          } else {
-            setNewProjectModalOpen(false);
-            setProcessingRepo(repo.fullName);
-            setTimeout(() => {
-              setProcessingRepo(null);
-              toast({
-                title: "Documentation Generated",
-                description: `Documentation for ${repo.fullName} has been generated.`,
-              });
-            }, 5000);
-          }
-        }}
       />
 
       <DuplicateRepositoryModal
