@@ -14,6 +14,7 @@ export const mockProjects: Project[] = [
     summary: "A comprehensive React dashboard with data visualization, user management, and real-time updates.",
     loc: 15420,
     componentCount: 87,
+    integrationSource: "local",
     latestJob: {
       id: "job-1",
       status: "completed",
@@ -28,6 +29,7 @@ export const mockProjects: Project[] = [
     summary: "Microservices API gateway handling authentication, rate limiting, and request routing.",
     loc: 8750,
     componentCount: 42,
+    integrationSource: "github",
     latestJob: {
       id: "job-2",
       status: "running",
@@ -42,6 +44,7 @@ export const mockProjects: Project[] = [
     summary: "Machine learning data processing pipeline with feature engineering and model training.",
     loc: 23100,
     componentCount: 156,
+    integrationSource: "local",
     latestJob: {
       id: "job-3",
       status: "failed",
@@ -57,6 +60,7 @@ export const mockProjects: Project[] = [
     summary: undefined,
     loc: 5200,
     componentCount: 28,
+    integrationSource: "github",
     latestJob: {
       id: "job-4",
       status: "pending",
@@ -71,6 +75,7 @@ export const mockProjects: Project[] = [
     summary: "Full-stack e-commerce solution with payment processing, inventory, and order management.",
     loc: 45000,
     componentCount: 234,
+    integrationSource: "local",
     latestJob: {
       id: "job-5",
       status: "completed",
@@ -85,6 +90,7 @@ export const mockProjects: Project[] = [
     summary: undefined,
     loc: undefined,
     componentCount: undefined,
+    integrationSource: "local",
     latestJob: undefined,
   },
 ];

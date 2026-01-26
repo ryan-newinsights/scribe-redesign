@@ -1,8 +1,9 @@
 import { Project, JobStatus } from "@/types/project";
-import { Database, Box, FileText, RefreshCw, Eye } from "lucide-react";
+import { Database, Box, FileText, RefreshCw, Eye, Github, HardDrive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
@@ -48,11 +49,26 @@ export function ProjectCard({ project, onRerun, onViewProgress, onViewDocs, onTi
     }
   };
 
+  const IntegrationIcon = project.integrationSource === 'github' ? Github : HardDrive;
+  const integrationLabel = project.integrationSource === 'github' ? 'GitHub repository' : 'Local directory';
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow relative">
+      {/* Integration source indicator */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="absolute top-3 right-3">
+            <IntegrationIcon className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{integrationLabel}</p>
+        </TooltipContent>
+      </Tooltip>
+
       <CardContent className="p-5">
         {/* Row 1: Title + Status Badge */}
-        <div className="flex justify-between items-start mb-3 gap-2">
+        <div className="flex justify-between items-start mb-3 gap-2 pr-6">
           <h3 
             className={cn(
               "text-lg font-bold text-foreground truncate flex-1",
