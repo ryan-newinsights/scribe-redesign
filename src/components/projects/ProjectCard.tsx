@@ -53,22 +53,10 @@ export function ProjectCard({ project, onRerun, onViewProgress, onViewDocs, onTi
   const integrationLabel = project.integrationSource === 'github' ? 'GitHub repository' : 'Local directory';
 
   return (
-    <Card className="hover:shadow-md transition-shadow relative">
-      {/* Integration source indicator */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="absolute top-3 right-3">
-            <IntegrationIcon className="h-4 w-4 text-muted-foreground" />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{integrationLabel}</p>
-        </TooltipContent>
-      </Tooltip>
-
+    <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5">
         {/* Row 1: Title + Status Badge */}
-        <div className="flex justify-between items-start mb-3 gap-2 pr-6">
+        <div className="flex justify-between items-start mb-3 gap-2">
           <h3 
             className={cn(
               "text-lg font-bold text-foreground truncate flex-1",
@@ -85,6 +73,16 @@ export function ProjectCard({ project, onRerun, onViewProgress, onViewDocs, onTi
 
         {/* Row 2: Metrics */}
         <div className="flex gap-4 text-sm text-muted-foreground mb-3">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="flex items-center gap-1.5">
+                <IntegrationIcon className="h-4 w-4" />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{integrationLabel}</p>
+            </TooltipContent>
+          </Tooltip>
           <span className="flex items-center gap-1.5">
             <Database className="h-4 w-4" />
             {project.loc?.toLocaleString() || "—"} LOC
