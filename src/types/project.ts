@@ -1,5 +1,7 @@
 export type JobStatus = 'completed' | 'running' | 'failed' | 'pending';
 
+export type IntegrationSource = 'local' | 'github';
+
 export interface Job {
   id: string;
   status: JobStatus;
@@ -16,6 +18,7 @@ export interface Project {
   loc?: number;
   componentCount?: number;
   latestJob?: Job;
+  integrationSource: IntegrationSource;
 }
 
 export interface LLMConfig {
