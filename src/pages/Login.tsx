@@ -17,8 +17,8 @@ const Login = () => {
       <Card className="w-full max-w-md border-0 shadow-lg">
         <CardContent className="pt-12 pb-10 px-8">
           {/* Brand */}
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-light tracking-tight text-foreground mb-2">
+          <div className="text-center mb-10" style={{ fontFamily: "'Jost', sans-serif" }}>
+            <h1 className="text-3xl tracking-tight text-foreground mb-2" style={{ fontWeight: 300 }}>
               newinsights.ai
             </h1>
             <p className="text-muted-foreground text-sm">
