@@ -14,7 +14,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-0 shadow-lg">
+      <Card className="w-full max-w-md border border-border shadow-lg">
         <CardContent className="pt-12 pb-10 px-8">
           {/* Brand */}
           <div className="text-center mb-10" style={{ fontFamily: "'Jost', sans-serif" }}>
