@@ -167,16 +167,10 @@ export function ProjectCard({
               const syncConfig = syncStatusConfig[project.syncStatus];
               const SyncIcon = syncConfig.icon;
               return (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className={cn("flex items-center gap-1 shrink-0", syncConfig.className)}>
-                      <SyncIcon className="h-3.5 w-3.5" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{syncConfig.label}</p>
-                  </TooltipContent>
-                </Tooltip>
+                <span className={cn("flex items-center gap-1 min-w-0 shrink", syncConfig.className)}>
+                  <SyncIcon className="h-3.5 w-3.5 shrink-0" />
+                  <span className="text-xs font-medium truncate">{syncConfig.label}</span>
+                </span>
               );
             })()}
           </div>
