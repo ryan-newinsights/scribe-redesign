@@ -71,12 +71,54 @@ const Index = () => {
     navigate(`/progress/${projectId}`);
   };
 
+  const handleStart = (projectId: string) => {
+    const project = mockProjects.find(p => p.id === projectId);
+    toast({
+      title: "Starting Documentation",
+      description: `Started documentation generation for ${project?.name}`,
+    });
+    navigate(`/progress/${projectId}`);
+  };
+
   const handleViewProgress = (projectId: string) => {
     navigate(`/progress/${projectId}`);
   };
 
   const handleViewDocs = (projectId: string) => {
     navigate(`/docs/${projectId}`);
+  };
+
+  const handleUnlink = (projectId: string) => {
+    const project = mockProjects.find(p => p.id === projectId);
+    toast({
+      title: "Repository Unlinked",
+      description: `${project?.name} has been unlinked from GitHub.`,
+    });
+  };
+
+  const handleDelete = (projectId: string) => {
+    const project = mockProjects.find(p => p.id === projectId);
+    toast({
+      title: "Project Deleted",
+      description: `${project?.name} has been deleted.`,
+      variant: "destructive",
+    });
+  };
+
+  const handleDownloadDocs = (projectId: string) => {
+    const project = mockProjects.find(p => p.id === projectId);
+    toast({
+      title: "Downloading Documents",
+      description: `Downloading documentation for ${project?.name}...`,
+    });
+  };
+
+  const handleDownloadLogs = (projectId: string) => {
+    const project = mockProjects.find(p => p.id === projectId);
+    toast({
+      title: "Downloading Logs",
+      description: `Downloading error logs for ${project?.name}...`,
+    });
   };
 
   return (
@@ -138,9 +180,15 @@ const Index = () => {
             key={project.id}
             project={project}
             onRerun={handleRerun}
+            onStart={handleStart}
             onViewProgress={handleViewProgress}
             onViewDocs={handleViewDocs}
             onTitleClick={handleViewDocs}
+            onUnlink={handleUnlink}
+            onDelete={handleDelete}
+            onDownloadDocs={handleDownloadDocs}
+            onDownloadLogs={handleDownloadLogs}
+            repositoryUrl={project.integrationSource === 'github' ? `https://github.com/${project.name}` : undefined}
           />
         ))}
       </div>
