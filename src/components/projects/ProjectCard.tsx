@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Project, JobStatus } from "@/types/project";
+import { Project, JobStatus, SyncStatus } from "@/types/project";
 import {
   Database,
   Box,
@@ -11,6 +11,9 @@ import {
   Unlink,
   Trash2,
   Download,
+  Check,
+  AlertCircle,
+  CircleDashed,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -61,6 +64,24 @@ const statusConfig: Record<JobStatus | 'new', { label: string; className: string
   new: {
     label: "New",
     className: "bg-muted text-muted-foreground",
+  },
+};
+
+const syncStatusConfig: Record<SyncStatus, { label: string; icon: typeof Check; className: string }> = {
+  "up-to-date": {
+    label: "Up to date",
+    icon: Check,
+    className: "text-success",
+  },
+  "updates-available": {
+    label: "Updates available",
+    icon: AlertCircle,
+    className: "text-warning",
+  },
+  "not-synced": {
+    label: "Not synced",
+    icon: CircleDashed,
+    className: "text-muted-foreground",
   },
 };
 
@@ -122,7 +143,7 @@ export function ProjectCard({
           </div>
 
           {/* Row 2: Metrics */}
-          <div className="flex gap-4 text-sm text-muted-foreground mb-3">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
             <Tooltip>
               <TooltipTrigger asChild>
                 <span className="flex items-center gap-1.5">
@@ -141,6 +162,17 @@ export function ProjectCard({
               <Box className="h-4 w-4" />
               {project.componentCount || "—"} components
             </span>
+            {/* Sync status for GitHub projects */}
+            {isGitHub && project.syncStatus && (() => {
+              const syncConfig = syncStatusConfig[project.syncStatus];
+              const SyncIcon = syncConfig.icon;
+              return (
+                <span className={cn("flex items-center gap-1", syncConfig.className)}>
+                  <SyncIcon className="h-3.5 w-3.5" />
+                  <span className="text-xs font-medium">{syncConfig.label}</span>
+                </span>
+              );
+            })()}
           </div>
 
           {/* Row 3: Summary */}
