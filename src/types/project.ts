@@ -2,6 +2,8 @@ export type JobStatus = 'completed' | 'running' | 'failed' | 'pending';
 
 export type IntegrationSource = 'local' | 'github';
 
+export type SyncStatus = 'up-to-date' | 'updates-available' | 'not-synced';
+
 export interface Job {
   id: string;
   status: JobStatus;
@@ -19,6 +21,7 @@ export interface Project {
   componentCount?: number;
   latestJob?: Job;
   integrationSource: IntegrationSource;
+  syncStatus?: SyncStatus;
 }
 
 export interface LLMConfig {

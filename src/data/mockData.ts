@@ -30,6 +30,7 @@ export const mockProjects: Project[] = [
     loc: 8750,
     componentCount: 42,
     integrationSource: "github",
+    syncStatus: "up-to-date",
     latestJob: {
       id: "job-2",
       status: "running",
@@ -61,6 +62,7 @@ export const mockProjects: Project[] = [
     loc: 5200,
     componentCount: 28,
     integrationSource: "github",
+    syncStatus: "updates-available",
     latestJob: {
       id: "job-4",
       status: "pending",
