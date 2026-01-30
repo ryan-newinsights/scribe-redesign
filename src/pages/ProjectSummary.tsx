@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,9 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Check, ArrowLeft, RotateCw } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
+import { mockFileTrees, getAllFiles } from "@/data/mockFileDocumentation";
+import { FileTreeSidebar, FileDocumentationView } from "@/components/documentation";
+import { DocumentedFile } from "@/types/fileDocumentation";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -13,8 +17,37 @@ const ProjectSummary = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [selectedFile, setSelectedFile] = useState<DocumentedFile | null>(null);
 
   const summary = projectId ? mockDocumentationSummaries[projectId] : null;
+  const fileTree = projectId ? mockFileTrees[projectId] : null;
+
+  // Initialize with first file if none selected
+  const handleSelectFile = (file: DocumentedFile) => {
+    setSelectedFile(file);
+  };
+
+  const handleDownloadAll = () => {
+    toast({
+      title: "Downloading Documentation",
+      description: "Preparing executive summary, detailed docs, and diagrams...",
+    });
+  };
+
+  const handleRerun = () => {
+    toast({
+      title: "Re-running Documentation",
+      description: `Regenerating documentation for ${summary?.projectName}...`,
+    });
+    navigate(`/progress/${projectId}`);
+  };
+
+  const handleDownloadFile = (fileName: string) => {
+    toast({
+      title: "Downloading",
+      description: `Downloading ${fileName}...`,
+    });
+  };
 
   if (!summary) {
     return (
@@ -29,29 +62,6 @@ const ProjectSummary = () => {
       </Layout>
     );
   }
-
-  const handleDownloadAll = () => {
-    toast({
-      title: "Downloading Documentation",
-      description: "Preparing executive summary, detailed docs, and diagrams...",
-    });
-  };
-
-  const handleRerun = () => {
-    toast({
-      title: "Re-running Documentation",
-      description: `Regenerating documentation for ${summary.projectName}...`,
-    });
-    // Navigate to progress page or trigger rerun logic
-    navigate(`/progress/${projectId}`);
-  };
-
-  const handleDownloadFile = (fileName: string) => {
-    toast({
-      title: "Downloading",
-      description: `Downloading ${fileName}...`,
-    });
-  };
 
   return (
     <Layout>
@@ -221,12 +231,30 @@ const ProjectSummary = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="files">
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground">File documentation viewer coming soon...</p>
-            </CardContent>
-          </Card>
+        <TabsContent value="files" className="mt-0">
+          {fileTree ? (
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-220px)] min-h-[500px]">
+              {/* File Tree Sidebar */}
+              <div className="lg:col-span-1 h-full">
+                <FileTreeSidebar
+                  fileTree={fileTree}
+                  selectedFileId={selectedFile?.id ?? null}
+                  onSelectFile={handleSelectFile}
+                />
+              </div>
+
+              {/* Documentation Content */}
+              <div className="lg:col-span-3 h-full">
+                <FileDocumentationView file={selectedFile} />
+              </div>
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <p className="text-muted-foreground">No file documentation available.</p>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="diagrams">
