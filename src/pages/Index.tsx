@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { NewIntegrationModal } from "@/components/projects/NewIntegrationModal";
 import { RecentDocumentsTable } from "@/components/projects/RecentDocumentsTable";
+import { EmptyProjectsState } from "@/components/projects/EmptyProjectsState";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { mockProjects, mockLLMConfigs, mockRecentDocuments } from "@/data/mockData";
@@ -148,50 +149,54 @@ const Index = () => {
         </Button>
       </div>
 
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        {/* GitHub Project Cards */}
-        {gitHubConnected && (
-          <>
-            <GitHubProjectCard
-              id="gh-1"
-              repositoryName="acme-corp/scribe-ai"
-              syncStatus="up-to-date"
-              lastProcessed={new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()}
-              onViewDocs={() => navigate("/docs/1")}
-              onCheckUpdates={() => toast({ title: "Checking for updates..." })}
-              onRegenerate={() => toast({ title: "Regenerating documentation..." })}
+      {/* Projects Grid or Empty State */}
+      {mockProjects.length === 0 && !gitHubConnected ? (
+        <EmptyProjectsState onNewIntegration={() => setModalOpen(true)} />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          {/* GitHub Project Cards */}
+          {gitHubConnected && (
+            <>
+              <GitHubProjectCard
+                id="gh-1"
+                repositoryName="acme-corp/scribe-ai"
+                syncStatus="up-to-date"
+                lastProcessed={new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()}
+                onViewDocs={() => navigate("/docs/1")}
+                onCheckUpdates={() => toast({ title: "Checking for updates..." })}
+                onRegenerate={() => toast({ title: "Regenerating documentation..." })}
+              />
+              <GitHubProjectCard
+                id="gh-2"
+                repositoryName="acme-corp/data-pipeline"
+                syncStatus="updates-available"
+                lastProcessed={new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()}
+                onViewDocs={() => navigate("/docs/2")}
+                onCheckUpdates={() => toast({ title: "Checking for updates..." })}
+                onRegenerate={() => toast({ title: "Regenerating documentation..." })}
+              />
+            </>
+          )}
+          
+          {/* Regular Project Cards */}
+          {mockProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onRerun={handleRerun}
+              onStart={handleStart}
+              onViewProgress={handleViewProgress}
+              onViewDocs={handleViewDocs}
+              onTitleClick={handleViewDocs}
+              onUnlink={handleUnlink}
+              onDelete={handleDelete}
+              onDownloadDocs={handleDownloadDocs}
+              onDownloadLogs={handleDownloadLogs}
+              repositoryUrl={project.integrationSource === 'github' ? `https://github.com/${project.name}` : undefined}
             />
-            <GitHubProjectCard
-              id="gh-2"
-              repositoryName="acme-corp/data-pipeline"
-              syncStatus="updates-available"
-              lastProcessed={new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()}
-              onViewDocs={() => navigate("/docs/2")}
-              onCheckUpdates={() => toast({ title: "Checking for updates..." })}
-              onRegenerate={() => toast({ title: "Regenerating documentation..." })}
-            />
-          </>
-        )}
-        
-        {/* Regular Project Cards */}
-        {mockProjects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onRerun={handleRerun}
-            onStart={handleStart}
-            onViewProgress={handleViewProgress}
-            onViewDocs={handleViewDocs}
-            onTitleClick={handleViewDocs}
-            onUnlink={handleUnlink}
-            onDelete={handleDelete}
-            onDownloadDocs={handleDownloadDocs}
-            onDownloadLogs={handleDownloadLogs}
-            repositoryUrl={project.integrationSource === 'github' ? `https://github.com/${project.name}` : undefined}
-          />
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Recently Viewed Documents */}
       <div className="mt-10">
