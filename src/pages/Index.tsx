@@ -150,7 +150,8 @@ const Index = () => {
       </div>
 
       {/* Projects Grid or Empty State */}
-      {mockProjects.length === 0 && !gitHubConnected ? (
+      {/* TODO: Remove "true ||" to restore normal behavior */}
+      {true || (mockProjects.length === 0 && !gitHubConnected) ? (
         <EmptyProjectsState onNewIntegration={() => setModalOpen(true)} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
