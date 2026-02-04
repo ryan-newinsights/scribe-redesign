@@ -23,6 +23,7 @@ import { Download, Check, RotateCw, Settings, ChevronDown } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { FileTreeSidebar, FileDocumentationView } from "@/components/documentation";
+import { DiagramsTab } from "@/components/diagrams";
 import { DocumentedFile } from "@/types/fileDocumentation";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -362,17 +363,7 @@ const ProjectSummary = () => {
 
         {/* Diagrams Tab */}
         <TabsContent value="diagrams">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Architecture Diagrams</CardTitle>
-            </CardHeader>
-            <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground">Diagrams viewer coming soon...</p>
-              <p className="text-sm text-muted-foreground mt-2">
-                View system architecture, data flow, and sequence diagrams.
-              </p>
-            </CardContent>
-          </Card>
+          <DiagramsTab />
         </TabsContent>
 
         {/* History Tab (NEW) */}
