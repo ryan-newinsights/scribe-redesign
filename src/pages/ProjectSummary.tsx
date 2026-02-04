@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, Check, ArrowLeft, RotateCw } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Download, Check, RotateCw, Settings, ChevronDown } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
-import { mockFileTrees, getAllFiles } from "@/data/mockFileDocumentation";
+import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { FileTreeSidebar, FileDocumentationView } from "@/components/documentation";
 import { DocumentedFile } from "@/types/fileDocumentation";
 import { useToast } from "@/hooks/use-toast";
@@ -22,21 +36,25 @@ const ProjectSummary = () => {
   const summary = projectId ? mockDocumentationSummaries[projectId] : null;
   const fileTree = projectId ? mockFileTrees[projectId] : null;
 
-  // Initialize with first file if none selected
   const handleSelectFile = (file: DocumentedFile) => {
     setSelectedFile(file);
   };
 
-  const handleDownloadAll = () => {
+  const handleExport = (type: "docs" | "codemap" | "diagrams") => {
+    const labels = {
+      docs: "Documentation",
+      codemap: "CodeMap",
+      diagrams: "Diagrams",
+    };
     toast({
-      title: "Downloading Documentation",
-      description: "Preparing executive summary, detailed docs, and diagrams...",
+      title: `Exporting ${labels[type]}`,
+      description: `Preparing ${labels[type].toLowerCase()} for download...`,
     });
   };
 
-  const handleRerun = () => {
+  const handleRegenerate = () => {
     toast({
-      title: "Re-running Documentation",
+      title: "Regenerating Documentation",
       description: `Regenerating documentation for ${summary?.projectName}...`,
     });
     navigate(`/progress/${projectId}`);
@@ -49,13 +67,19 @@ const ProjectSummary = () => {
     });
   };
 
+  const handleSettings = () => {
+    toast({
+      title: "Settings",
+      description: "Project settings coming soon...",
+    });
+  };
+
   if (!summary) {
     return (
       <Layout>
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Documentation not found.</p>
+          <p className="text-muted-foreground">Project not found.</p>
           <Button variant="outline" className="mt-4" onClick={() => navigate("/")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Projects
           </Button>
         </div>
@@ -65,33 +89,95 @@ const ProjectSummary = () => {
 
   return (
     <Layout>
+      {/* Breadcrumb */}
+      <Breadcrumb className="mb-4">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/">Projects</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{summary.projectName}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Documentation Review</h1>
+          <h1 className="text-2xl font-bold">Project Workspace</h1>
           <p className="text-muted-foreground">{summary.projectName}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleRerun}>
+          <Button variant="ghost" size="icon" onClick={handleSettings}>
+            <Settings className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" onClick={handleRegenerate}>
             <RotateCw className="h-4 w-4 mr-2" />
-            Re-run
+            Regenerate
           </Button>
-          <Button onClick={handleDownloadAll}>
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>
+                <Download className="h-4 w-4 mr-2" />
+                Export
+                <ChevronDown className="h-4 w-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport("docs")}>
+                Export Docs
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("codemap")}>
+                Export CodeMap
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("diagrams")}>
+                Export Diagrams
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="summary" className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="summary">Summary</TabsTrigger>
-          <TabsTrigger value="files">File Documentation</TabsTrigger>
-          <TabsTrigger value="diagrams">Diagrams</TabsTrigger>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="mb-6 bg-transparent border-b border-border rounded-none p-0 h-auto w-full justify-start">
+          <TabsTrigger
+            value="overview"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            Overview
+          </TabsTrigger>
+          <TabsTrigger
+            value="documentation"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            Documentation
+          </TabsTrigger>
+          <TabsTrigger
+            value="structure"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            Structure
+          </TabsTrigger>
+          <TabsTrigger
+            value="diagrams"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            Diagrams
+          </TabsTrigger>
+          <TabsTrigger
+            value="history"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            History
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="summary">
+        {/* Overview Tab (formerly Summary) */}
+        <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Content - Left Column */}
             <div className="lg:col-span-2">
@@ -226,12 +312,12 @@ const ProjectSummary = () => {
                   </div>
                 </CardContent>
               </Card>
-
             </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="files" className="mt-0">
+        {/* Documentation Tab (formerly File Documentation) */}
+        <TabsContent value="documentation" className="mt-0">
           {fileTree ? (
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-220px)] min-h-[500px]">
               {/* File Tree Sidebar */}
@@ -257,10 +343,51 @@ const ProjectSummary = () => {
           )}
         </TabsContent>
 
+        {/* Structure Tab (NEW) */}
+        <TabsContent value="structure">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Codebase Structure</CardTitle>
+            </CardHeader>
+            <CardContent className="py-12 text-center">
+              <p className="text-muted-foreground">
+                Codebase topology visualization coming soon...
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                View dependency graphs, module relationships, and architectural patterns.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Diagrams Tab */}
         <TabsContent value="diagrams">
           <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Architecture Diagrams</CardTitle>
+            </CardHeader>
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground">Diagrams viewer coming soon...</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                View system architecture, data flow, and sequence diagrams.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* History Tab (NEW) */}
+        <TabsContent value="history">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Job History</CardTitle>
+            </CardHeader>
+            <CardContent className="py-12 text-center">
+              <p className="text-muted-foreground">
+                Job history and version tracking coming soon...
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                View past documentation runs, compare versions, and restore previous states.
+              </p>
             </CardContent>
           </Card>
         </TabsContent>
