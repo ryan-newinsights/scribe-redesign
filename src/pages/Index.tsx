@@ -63,7 +63,7 @@ const Index = () => {
     });
   };
 
-  const handleRerun = (projectId: string) => {
+  const handleRerun = (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => {
     const project = mockProjects.find(p => p.id === projectId);
     toast({
       title: "Re-running Documentation",
@@ -72,7 +72,7 @@ const Index = () => {
     navigate(`/progress/${projectId}`);
   };
 
-  const handleStart = (projectId: string) => {
+  const handleStart = (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => {
     const project = mockProjects.find(p => p.id === projectId);
     toast({
       title: "Starting Documentation",
@@ -193,6 +193,7 @@ const Index = () => {
               onDownloadDocs={handleDownloadDocs}
               onDownloadLogs={handleDownloadLogs}
               repositoryUrl={project.integrationSource === 'github' ? `https://github.com/${project.name}` : undefined}
+              llmConfigs={mockLLMConfigs}
             />
           ))}
         </div>

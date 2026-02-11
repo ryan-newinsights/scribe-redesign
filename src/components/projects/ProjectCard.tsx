@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Project, JobStatus, SyncStatus } from "@/types/project";
+import { Project, JobStatus, SyncStatus, LLMConfig } from "@/types/project";
 import {
   Database,
   Box,
@@ -28,20 +28,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ProgressButton } from "./ProgressButton";
 import { ErrorModal } from "./ErrorModal";
+import { GenerationConfigModal } from "./GenerationConfigModal";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
   project: Project;
-  onRerun: (projectId: string) => void;
+  onRerun: (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => void;
   onViewProgress: (projectId: string) => void;
   onViewDocs: (projectId: string) => void;
   onTitleClick?: (projectId: string) => void;
-  onStart?: (projectId: string) => void;
+  onStart?: (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => void;
   onUnlink?: (projectId: string) => void;
   onDelete?: (projectId: string) => void;
   onDownloadDocs?: (projectId: string) => void;
   onDownloadLogs?: (projectId: string) => void;
   repositoryUrl?: string;
+  llmConfigs?: LLMConfig[];
 }
 
 const statusConfig: Record<JobStatus | 'new', { label: string; className: string }> = {
@@ -97,8 +99,10 @@ export function ProjectCard({
   onDownloadDocs,
   onDownloadLogs,
   repositoryUrl,
+  llmConfigs = [],
 }: ProjectCardProps) {
   const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [configModalOpen, setConfigModalOpen] = useState(false);
 
   const status = project.latestJob?.status || 'new';
   const { label, className } = statusConfig[status];
@@ -112,7 +116,9 @@ export function ProjectCard({
   };
 
   const handleStart = () => {
-    if (onStart) {
+    if (llmConfigs.length > 0) {
+      setConfigModalOpen(true);
+    } else if (onStart) {
       onStart(project.id);
     } else {
       onRerun(project.id);
@@ -199,7 +205,7 @@ export function ProjectCard({
               progress={project.latestJob?.progress || 0}
               onStart={handleStart}
               onViewProgress={() => onViewProgress(project.id)}
-              onRerun={() => onRerun(project.id)}
+              onRerun={handleStart}
               onViewError={() => setErrorModalOpen(true)}
             />
 
@@ -259,6 +265,21 @@ export function ProjectCard({
         projectName={project.name}
         errorMessage={project.latestJob?.errorMessage}
         onDownloadLogs={onDownloadLogs ? () => onDownloadLogs(project.id) : undefined}
+      />
+
+      {/* Generation Config Modal */}
+      <GenerationConfigModal
+        open={configModalOpen}
+        onOpenChange={setConfigModalOpen}
+        projectName={project.name}
+        llmConfigs={llmConfigs}
+        onSubmit={(config) => {
+          if (status === 'new' || status === 'pending') {
+            onStart?.(project.id, config);
+          } else {
+            onRerun(project.id, config);
+          }
+        }}
       />
     </>
   );
