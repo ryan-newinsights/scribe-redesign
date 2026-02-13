@@ -22,8 +22,10 @@ import {
 import { Download, Check, RotateCw, Settings, ChevronDown } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { mockFileTrees } from "@/data/mockFileDocumentation";
+import { mockLLMConfigs } from "@/data/mockData";
 import { FileTreeSidebar, FileDocumentationView } from "@/components/documentation";
 import { DiagramsTab } from "@/components/diagrams";
+import { GenerationConfigModal } from "@/components/projects/GenerationConfigModal";
 import { DocumentedFile } from "@/types/fileDocumentation";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -33,6 +35,7 @@ const ProjectSummary = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedFile, setSelectedFile] = useState<DocumentedFile | null>(null);
+  const [configModalOpen, setConfigModalOpen] = useState(false);
 
   const summary = projectId ? mockDocumentationSummaries[projectId] : null;
   const fileTree = projectId ? mockFileTrees[projectId] : null;
@@ -54,9 +57,16 @@ const ProjectSummary = () => {
   };
 
   const handleRegenerate = () => {
+    setConfigModalOpen(true);
+  };
+
+  const handleGenerateWithConfig = (data: {
+    llmConfigId: string;
+    overwrite: boolean;
+  }) => {
     toast({
       title: "Regenerating Documentation",
-      description: `Regenerating documentation for ${summary?.projectName}...`,
+      description: `Starting regeneration with ${data.overwrite ? "overwrite" : "merge"} mode...`,
     });
     navigate(`/progress/${projectId}`);
   };
@@ -383,6 +393,14 @@ const ProjectSummary = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <GenerationConfigModal
+        open={configModalOpen}
+        onOpenChange={setConfigModalOpen}
+        projectName={summary?.projectName || ""}
+        llmConfigs={mockLLMConfigs}
+        onSubmit={handleGenerateWithConfig}
+      />
     </Layout>
   );
 };
