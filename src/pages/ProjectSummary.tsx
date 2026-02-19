@@ -20,7 +20,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Download, Check, RotateCw, Settings, ChevronDown, Users, Lightbulb, Zap } from "lucide-react";
+import { Download, Check, RotateCw, Settings, ChevronDown, Users, Lightbulb, Zap, AlertCircle, CircleDashed } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { mockLLMConfigs } from "@/data/mockData";
@@ -315,13 +315,42 @@ const ProjectSummary = () => {
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">Last Generated</p>
                     </div>
-                    {/* Coverage — teal, full width */}
-                    <div className="col-span-2 rounded-lg p-3 bg-teal-50 border border-teal-100 dark:bg-teal-950/30 dark:border-teal-900/40 flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground">Coverage</p>
-                      <p className="text-xl font-bold text-teal-600 dark:text-teal-400">
-                        {summary.coverage}%
-                      </p>
-                    </div>
+                    {/* Sync status — full width */}
+                    {(() => {
+                      const syncCfg = summary.syncStatus
+                        ? {
+                            "up-to-date": {
+                              label: "Up to date",
+                              Icon: Check,
+                              tile: "bg-success-bg border-success/20",
+                              text: "text-success",
+                            },
+                            "updates-available": {
+                              label: "Updates available",
+                              Icon: AlertCircle,
+                              tile: "bg-warning-bg border-warning/20",
+                              text: "text-warning",
+                            },
+                            "not-synced": {
+                              label: "Not synced",
+                              Icon: CircleDashed,
+                              tile: "bg-muted/40 border-border",
+                              text: "text-muted-foreground",
+                            },
+                          }[summary.syncStatus]
+                        : null;
+                      if (!syncCfg) return null;
+                      const { label, Icon, tile, text } = syncCfg;
+                      return (
+                        <div className={`col-span-2 rounded-lg p-3 border flex items-center justify-between ${tile}`}>
+                          <p className="text-xs text-muted-foreground">Repo Sync</p>
+                          <span className={`flex items-center gap-1.5 text-sm font-semibold ${text}`}>
+                            <Icon className="h-4 w-4" />
+                            {label}
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* Quality bars */}

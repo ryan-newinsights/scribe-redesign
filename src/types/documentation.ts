@@ -26,6 +26,8 @@ export interface UseCase {
   description: string;
 }
 
+export type DocSyncStatus = 'up-to-date' | 'updates-available' | 'not-synced';
+
 export interface DocumentationSummary {
   projectId: string;
   projectName: string;
@@ -34,6 +36,7 @@ export interface DocumentationSummary {
   totalFiles: number;
   functionsDocumented: { done: number; total: number };
   coverage: number;
+  syncStatus?: DocSyncStatus;
   lastGenerated: Date;
   keyFeatures: KeyFeature[];
   targetAudience?: TargetAudience[];
