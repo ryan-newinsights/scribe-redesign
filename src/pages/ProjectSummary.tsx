@@ -201,34 +201,6 @@ const ProjectSummary = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground leading-relaxed">{summary.overview}</p>
-
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-primary">
-                        {summary.totalFiles}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">Total Files</p>
-                    </div>
-                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-primary">
-                        {summary.functionsDocumented.done}/{summary.functionsDocumented.total}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">Functions Documented</p>
-                    </div>
-                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-primary">
-                        {summary.coverage}%
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">Coverage</p>
-                    </div>
-                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
-                      <p className="text-lg font-bold text-primary">
-                        {format(summary.lastGenerated, "dd MMM yy")}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">Last Generated</p>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
 
@@ -305,34 +277,77 @@ const ProjectSummary = () => {
               )}
             </div>
 
-            {/* Right Column - Quality & Stats */}
+            {/* Right Column - Analysis Summary */}
             <div className="space-y-6">
-              {/* Documentation Quality */}
+              {/* Unified Analysis Card */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Documentation Quality</CardTitle>
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg">Analysis Summary</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Completeness</span>
-                      <span>{summary.quality.completeness}%</span>
+                <CardContent className="space-y-5">
+                  {/* Colored stat tiles */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Files — blue */}
+                    <div className="rounded-lg p-3 bg-blue-50 border border-blue-100 dark:bg-blue-950/30 dark:border-blue-900/40">
+                      <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                        {summary.agentStats.readerAgent.filesAnalyzed}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Files Analyzed</p>
                     </div>
-                    <Progress value={summary.quality.completeness} className="h-2" />
+                    {/* Functions — purple */}
+                    <div className="rounded-lg p-3 bg-purple-50 border border-purple-100 dark:bg-purple-950/30 dark:border-purple-900/40">
+                      <p className="text-xl font-bold text-purple-600 dark:text-purple-400">
+                        {summary.functionsDocumented.done}/{summary.functionsDocumented.total}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Functions Covered</p>
+                    </div>
+                    {/* Lines of code — green */}
+                    <div className="rounded-lg p-3 bg-green-50 border border-green-100 dark:bg-green-950/30 dark:border-green-900/40">
+                      <p className="text-xl font-bold text-green-600 dark:text-green-400">
+                        {summary.agentStats.readerAgent.linesOfCode.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Lines of Code</p>
+                    </div>
+                    {/* Last generated — amber */}
+                    <div className="rounded-lg p-3 bg-amber-50 border border-amber-100 dark:bg-amber-950/30 dark:border-amber-900/40">
+                      <p className="text-xl font-bold text-amber-600 dark:text-amber-400 leading-tight">
+                        {format(summary.lastGenerated, "dd MMM yy")}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Last Generated</p>
+                    </div>
+                    {/* Coverage — teal, full width */}
+                    <div className="col-span-2 rounded-lg p-3 bg-teal-50 border border-teal-100 dark:bg-teal-950/30 dark:border-teal-900/40 flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground">Coverage</p>
+                      <p className="text-xl font-bold text-teal-600 dark:text-teal-400">
+                        {summary.coverage}%
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Quality Score</span>
-                      <span>{summary.quality.qualityScore}%</span>
+
+                  {/* Quality bars */}
+                  <div className="space-y-3 pt-1">
+                    <p className="text-sm font-medium">Documentation Quality</p>
+                    <div>
+                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                        <span>Completeness</span>
+                        <span className="font-medium text-foreground">{summary.quality.completeness}%</span>
+                      </div>
+                      <Progress value={summary.quality.completeness} className="h-1.5" />
                     </div>
-                    <Progress value={summary.quality.qualityScore} className="h-2 [&>div]:bg-green-500" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Examples Included</span>
-                      <span>{summary.quality.examplesIncluded}%</span>
+                    <div>
+                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                        <span>Quality Score</span>
+                        <span className="font-medium text-foreground">{summary.quality.qualityScore}%</span>
+                      </div>
+                      <Progress value={summary.quality.qualityScore} className="h-1.5 [&>div]:bg-green-500" />
                     </div>
-                    <Progress value={summary.quality.examplesIncluded} className="h-2 [&>div]:bg-purple-500" />
+                    <div>
+                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                        <span>Examples Included</span>
+                        <span className="font-medium text-foreground">{summary.quality.examplesIncluded}%</span>
+                      </div>
+                      <Progress value={summary.quality.examplesIncluded} className="h-1.5 [&>div]:bg-purple-500" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -358,31 +373,6 @@ const ProjectSummary = () => {
                       </Button>
                     </div>
                   ))}
-                </CardContent>
-              </Card>
-
-              {/* Agent Statistics */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Agent Statistics</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Reader Agent</span>
-                    <span>{summary.agentStats.readerAgent.filesAnalyzed} files analyzed</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Writer Agent</span>
-                    <span>{summary.agentStats.writerAgent.docstringsGenerated} docstrings generated</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Searcher Agent</span>
-                    <span>{summary.agentStats.searcherAgent.contextsGathered} contexts gathered</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Verifier Agent</span>
-                    <span>{summary.agentStats.verifierAgent.validationsCompleted} validations completed</span>
-                  </div>
                 </CardContent>
               </Card>
             </div>

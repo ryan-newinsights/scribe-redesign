@@ -93,7 +93,7 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       examplesIncluded: 78,
     },
     agentStats: {
-      readerAgent: { filesAnalyzed: 87 },
+      readerAgent: { filesAnalyzed: 87, linesOfCode: 14280 },
       writerAgent: { docstringsGenerated: 156 },
       searcherAgent: { contextsGathered: 312 },
       verifierAgent: { validationsCompleted: 156 },
@@ -141,7 +141,7 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       examplesIncluded: 78,
     },
     agentStats: {
-      readerAgent: { filesAnalyzed: 83 },
+      readerAgent: { filesAnalyzed: 83, linesOfCode: 9450 },
       writerAgent: { docstringsGenerated: 83 },
       searcherAgent: { contextsGathered: 247 },
       verifierAgent: { validationsCompleted: 83 },

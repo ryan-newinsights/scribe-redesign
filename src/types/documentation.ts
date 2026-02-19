@@ -5,7 +5,7 @@ export interface DocumentationQuality {
 }
 
 export interface AgentStats {
-  readerAgent: { filesAnalyzed: number };
+  readerAgent: { filesAnalyzed: number; linesOfCode: number };
   writerAgent: { docstringsGenerated: number };
   searcherAgent: { contextsGathered: number };
   verifierAgent: { validationsCompleted: number };
