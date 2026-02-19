@@ -10,6 +10,7 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
     totalFiles: 87,
     functionsDocumented: { done: 156, total: 156 },
     coverage: 100,
+    syncStatus: "up-to-date",
     lastGenerated: new Date("2025-12-18"),
     keyFeatures: [
       {
@@ -108,6 +109,7 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
     totalFiles: 8,
     functionsDocumented: { done: 83, total: 83 },
     coverage: 100,
+    syncStatus: "updates-available",
     lastGenerated: new Date("2025-11-26"),
     keyFeatures: [
       {
