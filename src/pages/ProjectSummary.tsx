@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -19,7 +20,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Download, Check, RotateCw, Settings, ChevronDown } from "lucide-react";
+import { Download, Check, RotateCw, Settings, ChevronDown, Users, Lightbulb, Zap } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { mockLLMConfigs } from "@/data/mockData";
@@ -191,56 +192,117 @@ const ProjectSummary = () => {
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Content - Left Column */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
+
+              {/* Executive Summary */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Project Overview</CardTitle>
+                  <CardTitle className="text-lg">Executive Summary</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <p className="text-muted-foreground">{summary.overview}</p>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">{summary.overview}</p>
 
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
+                      <p className="text-2xl font-bold text-primary">
                         {summary.totalFiles}
                       </p>
-                      <p className="text-sm text-muted-foreground">Total Files</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Total Files</p>
                     </div>
-                    <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
+                      <p className="text-2xl font-bold text-primary">
                         {summary.functionsDocumented.done}/{summary.functionsDocumented.total}
                       </p>
-                      <p className="text-sm text-muted-foreground">Functions Documented</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Functions Documented</p>
                     </div>
-                    <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
+                      <p className="text-2xl font-bold text-primary">
                         {summary.coverage}%
                       </p>
-                      <p className="text-sm text-muted-foreground">Coverage</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Coverage</p>
                     </div>
-                    <div className="bg-orange-50 dark:bg-orange-950/30 rounded-lg p-4">
-                      <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                        {format(summary.lastGenerated, "yyyy-MM-dd")}
+                    <div className="bg-primary/5 border border-primary/10 rounded-lg p-4">
+                      <p className="text-lg font-bold text-primary">
+                        {format(summary.lastGenerated, "dd MMM yy")}
                       </p>
-                      <p className="text-sm text-muted-foreground">Last Generated</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Last Generated</p>
                     </div>
-                  </div>
-
-                  {/* Key Features */}
-                  <div>
-                    <h4 className="font-semibold mb-3">Key Features</h4>
-                    <ul className="space-y-2">
-                      {summary.keyFeatures.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm">
-                          <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          <span className="text-muted-foreground">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Key Features */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-primary" />
+                    <CardTitle className="text-lg">Key Features</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {summary.keyFeatures.map((feature, idx) => (
+                      <div key={idx} className="flex gap-3">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium">{feature.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{feature.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Target Audience */}
+              {summary.targetAudience && summary.targetAudience.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-primary" />
+                      <CardTitle className="text-lg">Target Audience</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {summary.targetAudience.map((audience, idx) => (
+                        <div key={idx} className="flex gap-3 p-3 rounded-lg bg-muted/40 border border-border">
+                          <div>
+                            <Badge variant="secondary" className="mb-1.5 text-xs">{audience.role}</Badge>
+                            <p className="text-xs text-muted-foreground">{audience.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Use Cases */}
+              {summary.useCases && summary.useCases.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <Lightbulb className="h-4 w-4 text-primary" />
+                      <CardTitle className="text-lg">Use Cases</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {summary.useCases.map((useCase, idx) => (
+                      <div key={idx} className="flex gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <p className="text-sm font-medium">{useCase.title}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{useCase.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             {/* Right Column - Quality & Stats */}

@@ -11,6 +11,21 @@ export interface AgentStats {
   verifierAgent: { validationsCompleted: number };
 }
 
+export interface KeyFeature {
+  name: string;
+  description: string;
+}
+
+export interface TargetAudience {
+  role: string;
+  description: string;
+}
+
+export interface UseCase {
+  title: string;
+  description: string;
+}
+
 export interface DocumentationSummary {
   projectId: string;
   projectName: string;
@@ -20,7 +35,9 @@ export interface DocumentationSummary {
   functionsDocumented: { done: number; total: number };
   coverage: number;
   lastGenerated: Date;
-  keyFeatures: string[];
+  keyFeatures: KeyFeature[];
+  targetAudience?: TargetAudience[];
+  useCases?: UseCase[];
   quality: DocumentationQuality;
   agentStats: AgentStats;
 }
