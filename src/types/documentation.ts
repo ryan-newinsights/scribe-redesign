@@ -28,10 +28,19 @@ export interface UseCase {
 
 export type DocSyncStatus = 'up-to-date' | 'updates-available' | 'not-synced';
 
+export interface RepoDetails {
+  type: 'github' | 'local';
+  path: string;
+  url?: string;
+  branch: string;
+  lastCommit: { hash: string; date: Date };
+}
+
 export interface DocumentationSummary {
   projectId: string;
   projectName: string;
   repoPath: string;
+  repoDetails?: RepoDetails;
   overview: string;
   totalFiles: number;
   functionsDocumented: { done: number; total: number };

@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Download, Check, RotateCw, Settings, ChevronDown, Users, Lightbulb, Zap, AlertCircle, CircleDashed } from "lucide-react";
+import { Download, Check, RotateCw, Settings, ChevronDown, Users, Lightbulb, Zap, AlertCircle, CircleDashed, Github, HardDrive, GitBranch, GitCommitHorizontal, ExternalLink } from "lucide-react";
 import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocumentationData";
 import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { mockLLMConfigs } from "@/data/mockData";
@@ -353,31 +353,55 @@ const ProjectSummary = () => {
                     })()}
                   </div>
 
-                  {/* Quality bars */}
-                  <div className="space-y-3 pt-1">
-                    <p className="text-sm font-medium">Documentation Quality</p>
-                    <div>
-                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                        <span>Completeness</span>
-                        <span className="font-medium text-foreground">{summary.quality.completeness}%</span>
+                  {/* Repository Details */}
+                  {summary.repoDetails && (() => {
+                    const repo = summary.repoDetails;
+                    const isGitHub = repo.type === "github";
+                    return (
+                      <div className="space-y-0 pt-1 border-t border-border">
+                        <div className="flex items-center gap-2 py-3">
+                          {isGitHub
+                            ? <Github className="h-4 w-4 text-muted-foreground" />
+                            : <HardDrive className="h-4 w-4 text-muted-foreground" />}
+                          <span className="text-sm font-medium">Repository</span>
+                        </div>
+                        <div className="space-y-2.5">
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="text-xs text-muted-foreground shrink-0 pt-0.5">Repository</span>
+                            {isGitHub && repo.url ? (
+                              <a
+                                href={repo.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs text-primary font-medium flex items-center gap-1 hover:underline text-right"
+                              >
+                                {repo.path}
+                                <ExternalLink className="h-3 w-3 shrink-0" />
+                              </a>
+                            ) : (
+                              <span className="text-xs font-medium text-foreground text-right break-all">{repo.path}</span>
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                              <GitBranch className="h-3.5 w-3.5" />
+                              Branch
+                            </span>
+                            <span className="text-xs font-medium text-foreground">{repo.branch}</span>
+                          </div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                              <GitCommitHorizontal className="h-3.5 w-3.5" />
+                              Last commit
+                            </span>
+                            <span className="text-xs font-medium text-foreground">
+                              {repo.lastCommit.hash} · {format(repo.lastCommit.date, "dd MMM yyyy")}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <Progress value={summary.quality.completeness} className="h-1.5" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                        <span>Quality Score</span>
-                        <span className="font-medium text-foreground">{summary.quality.qualityScore}%</span>
-                      </div>
-                      <Progress value={summary.quality.qualityScore} className="h-1.5 [&>div]:bg-green-500" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                        <span>Examples Included</span>
-                        <span className="font-medium text-foreground">{summary.quality.examplesIncluded}%</span>
-                      </div>
-                      <Progress value={summary.quality.examplesIncluded} className="h-1.5 [&>div]:bg-purple-500" />
-                    </div>
-                  </div>
+                    );
+                  })()}
                 </CardContent>
               </Card>
 
