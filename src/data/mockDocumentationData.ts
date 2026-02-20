@@ -88,6 +88,13 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
           "A new team member can use the sidebar search to explore the available data catalog, identify relevant datasets for their project, and preview the information in real-time.",
       },
     ],
+    repoDetails: {
+      type: "github",
+      path: "ryan-newinsights/data-self-service",
+      url: "https://github.com/ryan-newinsights/data-self-service",
+      branch: "main",
+      lastCommit: { hash: "75e2540", date: new Date("2026-02-19") },
+    },
     quality: {
       completeness: 100,
       qualityScore: 94,
@@ -137,6 +144,12 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
         description: "Produces formatted reports ready for internal and external audit review.",
       },
     ],
+    repoDetails: {
+      type: "local",
+      path: "/home/dev/ecommerce",
+      branch: "develop",
+      lastCommit: { hash: "a3f1c82", date: new Date("2026-01-14") },
+    },
     quality: {
       completeness: 100,
       qualityScore: 94,
