@@ -95,11 +95,11 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       branch: "main",
       lastCommit: { hash: "75e2540", date: new Date("2026-02-19") },
       languages: [
-        { name: "TypeScript", percentage: 62.4, color: "217 91% 60%" },
-        { name: "JavaScript", percentage: 18.7, color: "50 100% 50%" },
-        { name: "CSS", percentage: 11.2, color: "264 60% 55%" },
-        { name: "HTML", percentage: 5.8, color: "12 80% 55%" },
-        { name: "Python", percentage: 1.9, color: "207 60% 45%" },
+        { name: "TypeScript", percentage: 62.4, color: "217 91% 60%", classes: 84, functions: 312, methods: 620, loc: 8920 },
+        { name: "JavaScript", percentage: 18.7, color: "50 100% 50%", classes: 12, functions: 95, methods: 187, loc: 2670 },
+        { name: "CSS", percentage: 11.2, color: "264 60% 55%", classes: 0, functions: 0, methods: 0, loc: 1600 },
+        { name: "HTML", percentage: 5.8, color: "12 80% 55%", classes: 0, functions: 0, methods: 0, loc: 828 },
+        { name: "Python", percentage: 1.9, color: "207 60% 45%", classes: 8, functions: 24, methods: 41, loc: 262 },
       ],
     },
     quality: {
@@ -157,10 +157,10 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       branch: "develop",
       lastCommit: { hash: "a3f1c82", date: new Date("2026-01-14") },
       languages: [
-        { name: "Python", percentage: 54.1, color: "207 60% 45%" },
-        { name: "JavaScript", percentage: 28.3, color: "50 100% 50%" },
-        { name: "Shell", percentage: 10.5, color: "142 60% 45%" },
-        { name: "Dockerfile", percentage: 7.1, color: "200 70% 50%" },
+        { name: "Python", percentage: 54.1, color: "207 60% 45%", classes: 294, functions: 357, methods: 842, loc: 5110 },
+        { name: "JavaScript", percentage: 28.3, color: "50 100% 50%", classes: 18, functions: 112, methods: 203, loc: 2674 },
+        { name: "Shell", percentage: 10.5, color: "142 60% 45%", classes: 0, functions: 14, methods: 0, loc: 992 },
+        { name: "Dockerfile", percentage: 7.1, color: "200 70% 50%", classes: 0, functions: 0, methods: 0, loc: 674 },
       ],
     },
     quality: {

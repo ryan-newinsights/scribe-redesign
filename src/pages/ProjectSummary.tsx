@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -405,39 +406,43 @@ const ProjectSummary = () => {
                 </CardContent>
               </Card>
 
-              {/* Languages */}
+              {/* Component Inventory */}
               {summary.repoDetails?.languages && summary.repoDetails.languages.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Languages</CardTitle>
+                    <CardTitle className="text-lg">Component Inventory</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Stacked bar */}
-                    <div className="flex h-2.5 rounded-full overflow-hidden">
-                      {summary.repoDetails.languages.map((lang) => (
-                        <div
-                          key={lang.name}
-                          className="h-full first:rounded-l-full last:rounded-r-full"
-                          style={{
-                            width: `${lang.percentage}%`,
-                            backgroundColor: `hsl(${lang.color})`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                    {/* Legend */}
-                    <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                      {summary.repoDetails.languages.map((lang) => (
-                        <span key={lang.name} className="flex items-center gap-1.5 text-xs">
-                          <span
-                            className="h-2.5 w-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: `hsl(${lang.color})` }}
-                          />
-                          <span className="text-foreground font-medium">{lang.name}</span>
-                          <span className="text-muted-foreground">{lang.percentage}%</span>
-                        </span>
-                      ))}
-                    </div>
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="pl-6 text-xs">Language</TableHead>
+                          <TableHead className="text-xs text-right">Classes</TableHead>
+                          <TableHead className="text-xs text-right">Functions</TableHead>
+                          <TableHead className="text-xs text-right">Methods</TableHead>
+                          <TableHead className="text-xs text-right pr-6">LOC</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {summary.repoDetails.languages.map((lang) => (
+                          <TableRow key={lang.name}>
+                            <TableCell className="pl-6 py-2.5">
+                              <span className="flex items-center gap-2 text-sm">
+                                <span
+                                  className="h-3 w-3 rounded-full shrink-0"
+                                  style={{ backgroundColor: `hsl(${lang.color})` }}
+                                />
+                                {lang.name}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-right text-sm py-2.5">{lang.classes ?? "—"}</TableCell>
+                            <TableCell className="text-right text-sm py-2.5">{lang.functions ?? "—"}</TableCell>
+                            <TableCell className="text-right text-sm py-2.5">{lang.methods ?? "—"}</TableCell>
+                            <TableCell className="text-right text-sm pr-6 py-2.5">{lang.loc?.toLocaleString() ?? "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </CardContent>
                 </Card>
               )}

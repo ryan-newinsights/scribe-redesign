@@ -32,6 +32,10 @@ export interface RepoLanguage {
   name: string;
   percentage: number;
   color: string; // HSL color string for the bar
+  classes?: number;
+  functions?: number;
+  methods?: number;
+  loc?: number;
 }
 
 export interface RepoDetails {
