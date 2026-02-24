@@ -412,37 +412,31 @@ const ProjectSummary = () => {
                   <CardHeader>
                     <CardTitle className="text-lg">Component Inventory</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-0">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="pl-6 text-xs">Language</TableHead>
-                          <TableHead className="text-xs text-right">Classes</TableHead>
-                          <TableHead className="text-xs text-right">Functions</TableHead>
-                          <TableHead className="text-xs text-right">Methods</TableHead>
-                          <TableHead className="text-xs text-right pr-6">LOC</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {summary.repoDetails.languages.map((lang) => (
-                          <TableRow key={lang.name}>
-                            <TableCell className="pl-6 py-2.5">
-                              <span className="flex items-center gap-2 text-sm">
-                                <span
-                                  className="h-3 w-3 rounded-full shrink-0"
-                                  style={{ backgroundColor: `hsl(${lang.color})` }}
-                                />
-                                {lang.name}
-                              </span>
-                            </TableCell>
-                            <TableCell className="text-right text-sm py-2.5">{lang.classes ?? "—"}</TableCell>
-                            <TableCell className="text-right text-sm py-2.5">{lang.functions ?? "—"}</TableCell>
-                            <TableCell className="text-right text-sm py-2.5">{lang.methods ?? "—"}</TableCell>
-                            <TableCell className="text-right text-sm pr-6 py-2.5">{lang.loc?.toLocaleString() ?? "—"}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <CardContent className="p-0 overflow-hidden">
+                    <div className="w-full">
+                      <table className="w-full text-sm table-fixed">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left font-medium text-muted-foreground text-xs pl-6 pr-2 py-2.5 w-[36%]">Language</th>
+                            <th className="text-right font-medium text-muted-foreground text-xs px-1 py-2.5 w-[16%]">Classes</th>
+                            <th className="text-right font-medium text-muted-foreground text-xs px-1 py-2.5 w-[16%]">Funcs</th>
+                            <th className="text-right font-medium text-muted-foreground text-xs px-1 py-2.5 w-[16%]">Methods</th>
+                            <th className="text-right font-medium text-muted-foreground text-xs pl-1 pr-6 py-2.5 w-[16%]">LOC</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {summary.repoDetails.languages.map((lang) => (
+                            <tr key={lang.name} className="border-b last:border-0">
+                              <td className="pl-6 pr-2 py-2.5 text-sm font-medium truncate">{lang.name}</td>
+                              <td className="text-right px-1 py-2.5 text-sm tabular-nums">{lang.classes ?? "—"}</td>
+                              <td className="text-right px-1 py-2.5 text-sm tabular-nums">{lang.functions ?? "—"}</td>
+                              <td className="text-right px-1 py-2.5 text-sm tabular-nums">{lang.methods ?? "—"}</td>
+                              <td className="text-right pl-1 pr-6 py-2.5 text-sm tabular-nums">{lang.loc?.toLocaleString() ?? "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </CardContent>
                 </Card>
               )}
