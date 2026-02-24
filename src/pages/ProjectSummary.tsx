@@ -405,6 +405,43 @@ const ProjectSummary = () => {
                 </CardContent>
               </Card>
 
+              {/* Languages */}
+              {summary.repoDetails?.languages && summary.repoDetails.languages.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Languages</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Stacked bar */}
+                    <div className="flex h-2.5 rounded-full overflow-hidden">
+                      {summary.repoDetails.languages.map((lang) => (
+                        <div
+                          key={lang.name}
+                          className="h-full first:rounded-l-full last:rounded-r-full"
+                          style={{
+                            width: `${lang.percentage}%`,
+                            backgroundColor: `hsl(${lang.color})`,
+                          }}
+                        />
+                      ))}
+                    </div>
+                    {/* Legend */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                      {summary.repoDetails.languages.map((lang) => (
+                        <span key={lang.name} className="flex items-center gap-1.5 text-xs">
+                          <span
+                            className="h-2.5 w-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: `hsl(${lang.color})` }}
+                          />
+                          <span className="text-foreground font-medium">{lang.name}</span>
+                          <span className="text-muted-foreground">{lang.percentage}%</span>
+                        </span>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Download Files */}
               <Card>
                 <CardHeader>
