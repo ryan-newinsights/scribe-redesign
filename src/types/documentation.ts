@@ -28,12 +28,19 @@ export interface UseCase {
 
 export type DocSyncStatus = 'up-to-date' | 'updates-available' | 'not-synced';
 
+export interface RepoLanguage {
+  name: string;
+  percentage: number;
+  color: string; // HSL color string for the bar
+}
+
 export interface RepoDetails {
   type: 'github' | 'local';
   path: string;
   url?: string;
   branch: string;
   lastCommit: { hash: string; date: Date };
+  languages?: RepoLanguage[];
 }
 
 export interface DocumentationSummary {

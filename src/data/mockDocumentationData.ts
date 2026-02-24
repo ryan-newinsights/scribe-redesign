@@ -94,6 +94,13 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       url: "https://github.com/ryan-newinsights/data-self-service",
       branch: "main",
       lastCommit: { hash: "75e2540", date: new Date("2026-02-19") },
+      languages: [
+        { name: "TypeScript", percentage: 62.4, color: "217 91% 60%" },
+        { name: "JavaScript", percentage: 18.7, color: "50 100% 50%" },
+        { name: "CSS", percentage: 11.2, color: "264 60% 55%" },
+        { name: "HTML", percentage: 5.8, color: "12 80% 55%" },
+        { name: "Python", percentage: 1.9, color: "207 60% 45%" },
+      ],
     },
     quality: {
       completeness: 100,
@@ -149,6 +156,12 @@ export const mockDocumentationSummaries: Record<string, DocumentationSummary> = 
       path: "/home/dev/ecommerce",
       branch: "develop",
       lastCommit: { hash: "a3f1c82", date: new Date("2026-01-14") },
+      languages: [
+        { name: "Python", percentage: 54.1, color: "207 60% 45%" },
+        { name: "JavaScript", percentage: 28.3, color: "50 100% 50%" },
+        { name: "Shell", percentage: 10.5, color: "142 60% 45%" },
+        { name: "Dockerfile", percentage: 7.1, color: "200 70% 50%" },
+      ],
     },
     quality: {
       completeness: 100,
