@@ -26,7 +26,9 @@ import { mockDocumentationSummaries, mockDocumentFiles } from "@/data/mockDocume
 import { mockFileTrees } from "@/data/mockFileDocumentation";
 import { mockLLMConfigs } from "@/data/mockData";
 import { FileTreeSidebar, FileDocumentationView } from "@/components/documentation";
+import { TechOverviewTab } from "@/components/documentation/TechOverviewTab";
 import { DiagramsTab } from "@/components/diagrams";
+import { mockTechOverviews } from "@/data/mockTechOverviewData";
 import { GenerationConfigModal } from "@/components/projects/GenerationConfigModal";
 import { DocumentedFile } from "@/types/fileDocumentation";
 import { useToast } from "@/hooks/use-toast";
@@ -164,10 +166,16 @@ const ProjectSummary = () => {
             Overview
           </TabsTrigger>
           <TabsTrigger
+            value="tech-overview"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
+          >
+            Tech Overview
+          </TabsTrigger>
+          <TabsTrigger
             value="documentation"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 py-2.5 text-muted-foreground data-[state=active]:text-foreground hover:text-foreground transition-colors"
           >
-            Documentation
+            Code Docs
           </TabsTrigger>
           <TabsTrigger
             value="structure"
@@ -468,7 +476,20 @@ const ProjectSummary = () => {
           </div>
         </TabsContent>
 
-        {/* Documentation Tab (formerly File Documentation) */}
+        {/* Tech Overview Tab */}
+        <TabsContent value="tech-overview">
+          {projectId && mockTechOverviews[projectId] ? (
+            <TechOverviewTab data={mockTechOverviews[projectId]} />
+          ) : (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <p className="text-muted-foreground">No technical overview available for this project.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* Code Docs Tab */}
         <TabsContent value="documentation" className="mt-0">
           {fileTree ? (
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-220px)] min-h-[500px]">
