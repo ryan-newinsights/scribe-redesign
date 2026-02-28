@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Settings, Menu, User, LogOut } from "lucide-react";
+import { Home, Settings, Menu, User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,18 +31,6 @@ export function Header() {
       >
         <Home className="h-5 w-5" />
         Home
-      </Link>
-      <Link
-        to="/admin"
-        onClick={() => mobile && setMobileOpen(false)}
-        className={`flex items-center gap-2 font-medium transition-colors ${
-          isActive("/admin")
-            ? "text-primary"
-            : "text-muted-foreground hover:text-foreground"
-        }`}
-      >
-        <Settings className="h-5 w-5" />
-        Admin
       </Link>
     </>
   );
@@ -92,6 +80,13 @@ export function Header() {
                 <p className="text-sm font-medium">User</p>
                 <p className="text-xs text-muted-foreground">user@example.com</p>
               </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link to="/platform-admin" className="flex items-center">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Platform Admin Settings
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
