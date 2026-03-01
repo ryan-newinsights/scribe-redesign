@@ -82,6 +82,12 @@ export function Header() {
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
+                <Link to="/admin" className="flex items-center">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Admin Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <Link to="/platform-admin" className="flex items-center">
                   <Shield className="mr-2 h-4 w-4" />
                   Platform Admin Settings
