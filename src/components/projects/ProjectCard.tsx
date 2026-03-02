@@ -65,7 +65,7 @@ const statusConfig: Record<JobStatus | 'new', { label: string; className: string
   },
   new: {
     label: "New",
-    className: "bg-muted text-muted-foreground",
+    className: "bg-warning/10 text-warning",
   },
 };
 
@@ -108,6 +108,7 @@ export function ProjectCard({
   const { label, className } = statusConfig[status];
   const hasCompletedRun = project.latestJob?.status === 'completed';
   const isGitHub = project.integrationSource === 'github';
+  const needsAttention = status === 'new' || (isGitHub && project.syncStatus === 'updates-available');
 
   const handleTitleClick = () => {
     if (hasCompletedRun && onTitleClick) {
@@ -130,7 +131,7 @@ export function ProjectCard({
 
   return (
     <>
-      <Card className="hover:shadow-md transition-shadow">
+      <Card className={cn("hover:shadow-md transition-shadow", needsAttention && "border-warning/50 bg-warning/[0.02]")}>
         <CardContent className="p-5">
           {/* Row 1: Title + Status Badge */}
           <div className="flex justify-between items-start mb-3 gap-2">
