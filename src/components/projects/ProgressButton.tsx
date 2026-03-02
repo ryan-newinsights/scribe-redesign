@@ -22,7 +22,7 @@ export function ProgressButton({
   // New project - never run
   if (status === 'new' || status === 'pending') {
     return (
-      <Button className="flex-1" onClick={onStart}>
+      <Button className="flex-1 bg-warning text-warning-foreground hover:bg-warning/90" onClick={onStart}>
         <Play className="h-4 w-4 mr-1.5" />
         Start
       </Button>
