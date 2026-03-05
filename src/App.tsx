@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import PlatformAdmin from "./pages/PlatformAdmin";
+import Organizations from "./pages/Organizations";
 import Progress from "./pages/Progress";
 import ProjectSummary from "./pages/ProjectSummary";
 import Login from "./pages/Login";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/platform-admin" element={<PlatformAdmin />} />
+          <Route path="/organizations" element={<Organizations />} />
           <Route path="/progress/:projectId" element={<Progress />} />
           <Route path="/docs/:projectId" element={<ProjectSummary />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
