@@ -4,11 +4,9 @@ import { Settings } from "lucide-react";
 import { LanguagesTab } from "@/components/admin/LanguagesTab";
 import { FeatureFlagsTab } from "@/components/admin/FeatureFlagsTab";
 import { TierConfigurationsTab } from "@/components/admin/TierConfigurationsTab";
-import { useNavigate } from "react-router-dom";
+import { OrganizationsTab } from "@/components/admin/OrganizationsTab";
 
 const PlatformAdmin = () => {
-  const navigate = useNavigate();
-
   return (
     <Layout>
       <div className="flex items-center gap-3 mb-6">
@@ -19,35 +17,22 @@ const PlatformAdmin = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="languages" className="space-y-6">
+      <Tabs defaultValue="organizations" className="space-y-6">
         <TabsList className="bg-transparent border-b rounded-none w-full justify-start gap-4 px-0 h-auto pb-0">
-          <TabsTrigger
-            value="organizations"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none pb-3 px-1 text-sm"
-            onClick={() => navigate("/organizations")}
-          >
-            Organizations
-          </TabsTrigger>
-          <TabsTrigger
-            value="languages"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none pb-3 px-1 text-sm"
-          >
-            Languages
-          </TabsTrigger>
-          <TabsTrigger
-            value="feature-flags"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none pb-3 px-1 text-sm"
-          >
-            Feature Flags
-          </TabsTrigger>
-          <TabsTrigger
-            value="tiers"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none pb-3 px-1 text-sm"
-          >
-            Tier Configurations
-          </TabsTrigger>
+          {["organizations", "languages", "feature-flags", "tiers"].map(tab => (
+            <TabsTrigger
+              key={tab}
+              value={tab}
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none pb-3 px-1 text-sm capitalize"
+            >
+              {tab === "feature-flags" ? "Feature Flags" : tab === "tiers" ? "Tier Configurations" : tab}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
+        <TabsContent value="organizations">
+          <OrganizationsTab />
+        </TabsContent>
         <TabsContent value="languages">
           <LanguagesTab />
         </TabsContent>
