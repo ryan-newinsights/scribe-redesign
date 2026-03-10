@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import PlatformAdmin from "./pages/PlatformAdmin";
 import Organizations from "./pages/Organizations";
+import OrganizationDetail from "./pages/OrganizationDetail";
 import Progress from "./pages/Progress";
 import ProjectSummary from "./pages/ProjectSummary";
 import Login from "./pages/Login";
