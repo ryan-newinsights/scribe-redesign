@@ -1,9 +1,10 @@
 import { Layout } from "@/components/layout/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, Code2, Flag, Layers } from "lucide-react";
+import { Settings, Code2, Flag, Layers, Building2, ArrowRight } from "lucide-react";
 import { LanguagesTab } from "@/components/admin/LanguagesTab";
 import { FeatureFlagsTab } from "@/components/admin/FeatureFlagsTab";
 import { TierConfigurationsTab } from "@/components/admin/TierConfigurationsTab";
+import { Link } from "react-router-dom";
 
 const PlatformAdmin = () => {
   return (
