@@ -17,6 +17,20 @@ const PlatformAdmin = () => {
         </div>
       </div>
 
+      <Link
+        to="/organizations"
+        className="flex items-center justify-between p-4 mb-6 rounded-lg border bg-card hover:bg-accent/50 transition-colors group"
+      >
+        <div className="flex items-center gap-3">
+          <Building2 className="h-5 w-5 text-muted-foreground" />
+          <div>
+            <p className="font-medium">Organizations</p>
+            <p className="text-sm text-muted-foreground">View and manage customer organizations</p>
+          </div>
+        </div>
+        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+      </Link>
+
       <Tabs defaultValue="languages" className="space-y-6">
         <TabsList>
           <TabsTrigger value="languages" className="gap-1.5">
