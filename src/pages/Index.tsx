@@ -1,238 +1,212 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { ProjectCard } from "@/components/projects/ProjectCard";
-import { NewIntegrationModal } from "@/components/projects/NewIntegrationModal";
-import { RecentDocumentsTable } from "@/components/projects/RecentDocumentsTable";
-import { EmptyProjectsState } from "@/components/projects/EmptyProjectsState";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { mockProjects, mockLLMConfigs, mockRecentDocuments } from "@/data/mockData";
-import { useToast } from "@/hooks/use-toast";
 import {
-  GitHubConnectionBanner,
-  GitHubPermissionModal,
-  GitHubProjectCard,
-  ProcessingStateCard,
-  DuplicateRepositoryModal,
-} from "@/components/github";
-import { mockGitHubConnection, mockGitHubRepositories } from "@/data/mockGitHubData";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Database,
+  Box,
+  Github,
+  HardDrive,
+  Plus,
+  Play,
+  RefreshCw,
+  Loader2,
+  FileText,
+  Download,
+  ExternalLink,
+  Unplug,
+  MoreHorizontal,
+} from "lucide-react";
+import { mockProjects } from "@/data/mockData";
+import { cn } from "@/lib/utils";
+import type { JobStatus } from "@/types/project";
+
+const statusConfig: Record<JobStatus | "new", { label: string; badgeClassName: string }> = {
+  completed: { label: "Completed", badgeClassName: "bg-status-completed-bg text-status-completed" },
+  running: { label: "Processing", badgeClassName: "bg-status-running-bg text-status-running animate-pulse" },
+  failed: { label: "Failed", badgeClassName: "bg-status-failed-bg text-status-failed" },
+  pending: { label: "Pending", badgeClassName: "bg-status-pending-bg text-status-pending" },
+  new: { label: "New", badgeClassName: "bg-muted text-muted-foreground" },
+};
+
+const statusActionConfig: Record<JobStatus | "new", { label: string; icon: React.ElementType; className: string }> = {
+  completed: { label: "Re-run", icon: RefreshCw, className: "text-muted-foreground hover:text-foreground" },
+  running: { label: "Running", icon: Loader2, className: "text-status-running animate-spin cursor-default" },
+  failed: { label: "Re-run", icon: RefreshCw, className: "text-muted-foreground hover:text-foreground" },
+  pending: { label: "Pending", icon: Loader2, className: "text-status-pending animate-pulse cursor-default" },
+  new: { label: "Run", icon: Play, className: "text-muted-foreground hover:text-foreground" },
+};
 
 const Index = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [permissionModalOpen, setPermissionModalOpen] = useState(false);
-  const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
-  const [gitHubConnected, setGitHubConnected] = useState(!!mockGitHubConnection);
-  const [processingRepo, setProcessingRepo] = useState<string | null>(null);
-  const { toast } = useToast();
   const navigate = useNavigate();
-
-  const handleConnectGitHub = () => {
-    setPermissionModalOpen(true);
-  };
-
-  const handleAuthorizeGitHub = () => {
-    setPermissionModalOpen(false);
-    setGitHubConnected(true);
-    toast({
-      title: "GitHub Connected",
-      description: "Your GitHub account has been connected successfully.",
-    });
-  };
-
-  const handleConnectRepository = (repo: { fullName: string; isConnected?: boolean }) => {
-    if (repo.isConnected) {
-      setDuplicateModalOpen(true);
-    } else {
-      setModalOpen(false);
-      setProcessingRepo(repo.fullName);
-      setTimeout(() => {
-        setProcessingRepo(null);
-        toast({
-          title: "Documentation Generated",
-          description: `Documentation for ${repo.fullName} has been generated.`,
-        });
-      }, 5000);
-    }
-  };
-
-  const handleNewIntegration = (data: { repoPath: string; llmConfigId: string; overwrite: boolean }) => {
-    toast({
-      title: "Integration Started",
-      description: `Documentation generation started for ${data.repoPath}`,
-    });
-  };
-
-  const handleRerun = (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Re-running Documentation",
-      description: `Started documentation generation for ${project?.name}`,
-    });
-    navigate(`/progress/${projectId}`);
-  };
-
-  const handleStart = (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Starting Documentation",
-      description: `Started documentation generation for ${project?.name}`,
-    });
-    navigate(`/progress/${projectId}`);
-  };
-
-  const handleViewProgress = (projectId: string) => {
-    navigate(`/progress/${projectId}`);
-  };
-
-  const handleViewDocs = (projectId: string) => {
-    navigate(`/docs/${projectId}`);
-  };
-
-  const handleUnlink = (projectId: string) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Repository Unlinked",
-      description: `${project?.name} has been unlinked from GitHub.`,
-    });
-  };
-
-  const handleDelete = (projectId: string) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Project Deleted",
-      description: `${project?.name} has been deleted.`,
-      variant: "destructive",
-    });
-  };
-
-  const handleDownloadDocs = (projectId: string) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Downloading Documents",
-      description: `Downloading documentation for ${project?.name}...`,
-    });
-  };
-
-  const handleDownloadLogs = (projectId: string) => {
-    const project = mockProjects.find(p => p.id === projectId);
-    toast({
-      title: "Downloading Logs",
-      description: `Downloading error logs for ${project?.name}...`,
-    });
-  };
 
   return (
     <Layout>
-      {/* GitHub Connection Banner - shows when not connected */}
-      {!gitHubConnected && (
-        <GitHubConnectionBanner
-          onConnect={handleConnectGitHub}
-          className="mb-6"
-        />
-      )}
-
-      {/* Processing State Card - shows when processing a repo */}
-      {processingRepo && (
-        <ProcessingStateCard
-          state={{ status: "generating", message: `Processing ${processingRepo}...` }}
-          className="mb-6"
-        />
-      )}
-
-      {/* Section Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Projects</h1>
-        <Button onClick={() => setModalOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-heading font-bold">Projects</h1>
+        <Button size="sm">
+          <Plus className="h-4 w-4 mr-1.5" />
           New Integration
         </Button>
       </div>
 
-      {/* Projects Grid or Empty State */}
-      {mockProjects.length === 0 && !gitHubConnected ? (
-        <EmptyProjectsState onNewIntegration={() => setModalOpen(true)} />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {/* GitHub Project Cards */}
-          {gitHubConnected && (
-            <>
-              <GitHubProjectCard
-                id="gh-1"
-                repositoryName="acme-corp/scribe-ai"
-                syncStatus="up-to-date"
-                lastProcessed={new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()}
-                onViewDocs={() => navigate("/docs/1")}
-                onCheckUpdates={() => toast({ title: "Checking for updates..." })}
-                onRegenerate={() => toast({ title: "Regenerating documentation..." })}
-              />
-              <GitHubProjectCard
-                id="gh-2"
-                repositoryName="acme-corp/data-pipeline"
-                syncStatus="updates-available"
-                lastProcessed={new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()}
-                onViewDocs={() => navigate("/docs/2")}
-                onCheckUpdates={() => toast({ title: "Checking for updates..." })}
-                onRegenerate={() => toast({ title: "Regenerating documentation..." })}
-              />
-            </>
-          )}
-          
-          {/* Regular Project Cards */}
-          {mockProjects.map((project) => (
-            <ProjectCard
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
+        {mockProjects.map((project) => {
+          const status = project.latestJob?.status || "new";
+          const { label: actionLabel, icon: ActionIcon, className: actionClassName } = statusActionConfig[status];
+          const hasCompleted = project.latestJob?.status === "completed";
+          const isGitHub = project.integrationSource === "github";
+
+          return (
+            <Card
               key={project.id}
-              project={project}
-              onRerun={handleRerun}
-              onStart={handleStart}
-              onViewProgress={handleViewProgress}
-              onViewDocs={handleViewDocs}
-              onTitleClick={handleViewDocs}
-              onUnlink={handleUnlink}
-              onDelete={handleDelete}
-              onDownloadDocs={handleDownloadDocs}
-              onDownloadLogs={handleDownloadLogs}
-              repositoryUrl={project.integrationSource === 'github' ? `https://github.com/${project.name}` : undefined}
-              llmConfigs={mockLLMConfigs}
-            />
-          ))}
-        </div>
-      )}
+              className="hover:shadow-md transition-shadow cursor-pointer group"
+              onClick={() => {
+                if (hasCompleted) navigate(`/docs/${project.id}`);
+              }}
+            >
+              <CardContent className="p-5">
+                <div className="flex justify-between items-start mb-3 gap-2">
+                  <h3 className={cn("text-base font-heading font-semibold truncate flex-1", hasCompleted && "group-hover:text-accent transition-colors")}>
+                    {project.name}
+                  </h3>
+                  <Badge variant="secondary" className={cn("shrink-0 font-medium text-xs", statusConfig[status].badgeClassName)}>
+                    {statusConfig[status].label}
+                  </Badge>
+                </div>
 
-      {/* Recently Viewed Documents */}
-      <div className="mt-10">
-        <h2 className="text-xl font-bold mb-4">Recently Viewed Documents</h2>
-        <RecentDocumentsTable documents={mockRecentDocuments} />
+                <p className="text-sm text-muted-foreground line-clamp-3 min-h-[3.75rem] mb-3">
+                  {project.summary || "No documentation summary available yet."}
+                </p>
+
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  {isGitHub && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <a
+                          href={`https://github.com/${project.repoPath}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 hover:text-foreground transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Github className="h-3.5 w-3.5" />
+                        </a>
+                      </TooltipTrigger>
+                      <TooltipContent><p>View on GitHub</p></TooltipContent>
+                    </Tooltip>
+                  )}
+                  {!isGitHub && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="flex items-center gap-1">
+                          <HardDrive className="h-3.5 w-3.5" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent><p>Local</p></TooltipContent>
+                    </Tooltip>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <Database className="h-3.5 w-3.5" />
+                    {project.loc?.toLocaleString() || "—"}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Box className="h-3.5 w-3.5" />
+                    {project.componentCount || "—"}
+                  </span>
+
+                  <div className="flex items-center ml-auto gap-0.5">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={cn("h-6 w-6", actionClassName)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <ActionIcon className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent><p>{actionLabel}</p></TooltipContent>
+                    </Tooltip>
+
+                    {hasCompleted && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/docs/${project.id}`);
+                            }}
+                          >
+                            <FileText className="h-3 w-3" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent><p>View Docs</p></TooltipContent>
+                      </Tooltip>
+                    )}
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <MoreHorizontal className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                          <Download className="mr-2 h-4 w-4" />
+                          Download All Docs
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                          <Download className="mr-2 h-4 w-4" />
+                          Download Logs
+                        </DropdownMenuItem>
+                        {isGitHub && (
+                          <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            View on GitHub
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Unplug className="mr-2 h-4 w-4" />
+                          Disconnect
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
-
-      <NewIntegrationModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        llmConfigs={mockLLMConfigs}
-        onSubmit={handleNewIntegration}
-        isGitHubConnected={gitHubConnected}
-        repositories={mockGitHubRepositories}
-        onConnectGitHub={handleConnectGitHub}
-        onConnectRepository={handleConnectRepository}
-      />
-
-      <GitHubPermissionModal
-        open={permissionModalOpen}
-        onOpenChange={setPermissionModalOpen}
-        onAuthorize={handleAuthorizeGitHub}
-      />
-
-      <DuplicateRepositoryModal
-        open={duplicateModalOpen}
-        onOpenChange={setDuplicateModalOpen}
-        repositoryName="acme-corp/scribe-ai"
-        connectedBy="John Smith"
-        connectedAt="2025-01-10T09:00:00Z"
-        onViewProject={() => {
-          setDuplicateModalOpen(false);
-          navigate("/docs/1");
-        }}
-      />
     </Layout>
   );
 };
