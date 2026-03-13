@@ -39,7 +39,7 @@ const statusConfig: Record<JobStatus | "new", { label: string; badgeClassName: s
   running: { label: "Processing", badgeClassName: "bg-status-running-bg text-status-running animate-pulse" },
   failed: { label: "Failed", badgeClassName: "bg-status-failed-bg text-status-failed" },
   pending: { label: "Pending", badgeClassName: "bg-status-pending-bg text-status-pending" },
-  new: { label: "New", badgeClassName: "bg-muted text-muted-foreground" },
+  new: { label: "New", badgeClassName: "bg-status-pending-bg text-status-pending" },
 };
 
 const statusActionConfig: Record<JobStatus | "new", { label: string; icon: React.ElementType; className: string }> = {
