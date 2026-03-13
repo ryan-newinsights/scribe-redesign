@@ -49,8 +49,8 @@ export function AppSidebar() {
     location.pathname.includes(`/progress/${projectId}`);
 
   return (
-    <Sidebar collapsible="icon" className={cn("border-r", collapsed ? "border-transparent" : "border-sidebar-border")}>
-      <SidebarHeader className="h-12 flex items-center justify-center px-4 border-b border-border shrink-0">
+    <Sidebar collapsible="icon" className={cn("border-r", collapsed ? "border-transparent bg-background" : "border-sidebar-border")}>
+      <SidebarHeader className={cn("h-12 flex items-center justify-center px-4 shrink-0", !collapsed && "border-b border-border")}>
         <Link to="/" className="flex items-center justify-center">
           {!collapsed ? (
             <span className="font-heading font-light text-base text-sidebar-foreground tracking-tight">
@@ -127,10 +127,18 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* User footer - only shown when expanded */}
-      {!collapsed && (
-        <SidebarFooter className="p-2 border-t border-sidebar-border">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+      <SidebarFooter className={cn("p-2", !collapsed && "border-t border-sidebar-border")}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            {collapsed ? (
+              <button className="flex items-center justify-center w-full rounded-md py-1.5 hover:bg-sidebar-accent transition-colors">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs">
+                    RG
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            ) : (
               <button className="flex items-center gap-2 w-full rounded-md px-2 py-1.5 hover:bg-sidebar-accent transition-colors">
                 <Avatar className="h-7 w-7">
                   <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs">
@@ -143,34 +151,34 @@ export function AppSidebar() {
                 </div>
                 <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
               </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" align="start" className="w-56">
-              <div className="flex flex-col space-y-1 p-2">
-                <p className="text-sm font-medium">ryan-newinsights</p>
-                <p className="text-xs text-muted-foreground">ryan@newinsights.ai</p>
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link to="/admin" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Admin Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link to="/platform-admin" className="flex items-center">
-                  <Shield className="mr-2 h-4 w-4" />
-                  Platform Admin Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarFooter>
-      )}
+            )}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="top" align="start" className="w-56">
+            <div className="flex flex-col space-y-1 p-2">
+              <p className="text-sm font-medium">ryan-newinsights</p>
+              <p className="text-xs text-muted-foreground">ryan@newinsights.ai</p>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link to="/admin" className="flex items-center">
+                <Settings className="mr-2 h-4 w-4" />
+                Admin Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link to="/platform-admin" className="flex items-center">
+                <Shield className="mr-2 h-4 w-4" />
+                Platform Admin Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer">
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
