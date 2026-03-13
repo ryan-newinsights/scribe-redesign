@@ -50,7 +50,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className={cn("border-r", collapsed ? "border-transparent bg-background" : "border-sidebar-border")}>
-      <SidebarHeader className={cn("h-12 flex items-center justify-center px-4 shrink-0", !collapsed && "border-b border-border")}>
+      <SidebarHeader className="h-12 flex items-center justify-center px-4 shrink-0 border-b border-border">
         <Link to="/" className="flex items-center justify-center">
           {!collapsed ? (
             <span className="font-heading font-light text-base text-sidebar-foreground tracking-tight">
