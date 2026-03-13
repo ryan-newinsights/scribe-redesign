@@ -127,7 +127,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* User footer - only shown when expanded */}
-      <SidebarFooter className={cn("p-2", !collapsed && "border-t border-sidebar-border")}>
+      <SidebarFooter className={cn("p-2 mt-auto", !collapsed && "border-t border-sidebar-border")}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             {collapsed ? (
