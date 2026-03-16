@@ -242,8 +242,7 @@ export const OverviewTab = ({ summary }: OverviewTabProps) => {
                     <tbody>
                       {summary.repoDetails.languages.map((lang, i) => (
                         <tr key={i} className="border-t border-border">
-                          <td className="py-1.5 px-2.5 flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: `hsl(${lang.color})` }} />
+                          <td className="py-1.5 px-2.5">
                             {lang.name}
                           </td>
                           <td className="text-right py-1.5 px-2.5 text-muted-foreground">{lang.classes ?? 0}</td>
