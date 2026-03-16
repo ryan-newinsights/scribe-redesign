@@ -52,7 +52,7 @@ export const DiagramsTab = () => {
       </nav>
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0 flex gap-4">
+      <div className="flex-1 min-w-0 flex flex-col gap-4">
         <DiagramViewer diagram={currentDiagram} isLoading={isLoading} />
         <DiagramInfoSidebar
           diagram={currentDiagram}
