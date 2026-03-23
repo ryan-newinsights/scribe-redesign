@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +31,8 @@ import {
   Unplug,
   MoreHorizontal,
 } from "lucide-react";
-import { mockProjects } from "@/data/mockData";
+import { mockProjects, mockLLMConfigs } from "@/data/mockData";
+import { GenerationConfigModal } from "@/components/projects/GenerationConfigModal";
 import { cn } from "@/lib/utils";
 import type { JobStatus } from "@/types/project";
 
@@ -52,6 +54,14 @@ const statusActionConfig: Record<JobStatus | "new", { label: string; icon: React
 
 const Index = () => {
   const navigate = useNavigate();
+  const [configModalOpen, setConfigModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; status: string } | null>(null);
+
+  const handleActionClick = (projectId: string, projectName: string, status: string) => {
+    if (status === "running" || status === "pending") return;
+    setSelectedProject({ id: projectId, name: projectName, status });
+    setConfigModalOpen(true);
+  };
 
   return (
     <Layout>
@@ -153,6 +163,7 @@ const Index = () => {
                           className={cn("h-6 w-6", actionClassName)}
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleActionClick(project.id, project.name, status);
                           }}
                         >
                           <ActionIcon className="h-3 w-3" />
@@ -223,6 +234,19 @@ const Index = () => {
           );
         })}
       </div>
+
+      {/* Generation Config Modal */}
+      <GenerationConfigModal
+        open={configModalOpen}
+        onOpenChange={setConfigModalOpen}
+        projectName={selectedProject?.name || ""}
+        llmConfigs={mockLLMConfigs}
+        mode={selectedProject?.status === "new" || selectedProject?.status === "pending" ? "new" : "sync"}
+        onSubmit={(config) => {
+          console.log("Config submitted:", selectedProject?.id, config);
+          setConfigModalOpen(false);
+        }}
+      />
     </Layout>
   );
 };
