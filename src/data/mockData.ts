@@ -15,6 +15,7 @@ export const mockProjects: Project[] = [
     loc: 15420,
     componentCount: 87,
     integrationSource: "local",
+    commitsBehind: 0,
     latestJob: {
       id: "job-1",
       status: "completed",
@@ -29,6 +30,7 @@ export const mockProjects: Project[] = [
     summary: "Microservices API gateway handling authentication, rate limiting, and request routing.",
     loc: 8750,
     componentCount: 42,
+    commitsBehind: 3,
     integrationSource: "github",
     syncStatus: "up-to-date",
     latestJob: {
@@ -45,6 +47,7 @@ export const mockProjects: Project[] = [
     summary: "Machine learning data processing pipeline with feature engineering and model training.",
     loc: 23100,
     componentCount: 156,
+    commitsBehind: 12,
     integrationSource: "local",
     latestJob: {
       id: "job-3",
@@ -61,6 +64,7 @@ export const mockProjects: Project[] = [
     summary: undefined,
     loc: 5200,
     componentCount: 28,
+    commitsBehind: 7,
     integrationSource: "github",
     syncStatus: "updates-available",
     latestJob: {
@@ -77,6 +81,7 @@ export const mockProjects: Project[] = [
     summary: "Full-stack e-commerce solution with payment processing, inventory, and order management.",
     loc: 45000,
     componentCount: 234,
+    commitsBehind: 0,
     integrationSource: "local",
     latestJob: {
       id: "job-5",
