@@ -109,7 +109,7 @@ export function GenerationConfigPanel({
                 </p>
                 {fullUpdate && (
                   <p className="text-xs text-muted-foreground leading-relaxed pt-1">
-                    The last full run was <span className="font-semibold text-foreground">25,384,215</span> tokens.
+                    The last full update was <span className="font-semibold text-foreground">25,384,215</span> tokens.
                   </p>
                 )}
               </div>
