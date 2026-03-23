@@ -234,6 +234,19 @@ const Index = () => {
           );
         })}
       </div>
+
+      {/* Generation Config Modal */}
+      <GenerationConfigModal
+        open={configModalOpen}
+        onOpenChange={setConfigModalOpen}
+        projectName={selectedProject?.name || ""}
+        llmConfigs={mockLLMConfigs}
+        mode={selectedProject?.status === "new" || selectedProject?.status === "pending" ? "new" : "sync"}
+        onSubmit={(config) => {
+          console.log("Config submitted:", selectedProject?.id, config);
+          setConfigModalOpen(false);
+        }}
+      />
     </Layout>
   );
 };
