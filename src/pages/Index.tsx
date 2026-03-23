@@ -120,13 +120,29 @@ const Index = () => {
                     </Tooltip>
                   )}
                   <span className="flex items-center gap-1">
-                    <Database className="h-3.5 w-3.5" />
+                    <span className="text-xs font-mono">&lt;/&gt;</span>
                     {project.loc?.toLocaleString() || "—"}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Box className="h-3.5 w-3.5" />
-                    {project.componentCount || "—"}
-                  </span>
+                  {project.commitsBehind != null && project.commitsBehind > 0 ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="flex items-center gap-1 text-status-pending">
+                          <GitCommitHorizontal className="h-3.5 w-3.5" />
+                          {project.commitsBehind} behind
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent><p>{project.commitsBehind} commit{project.commitsBehind > 1 ? 's' : ''} since last doc generation</p></TooltipContent>
+                    </Tooltip>
+                  ) : hasCompleted && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="flex items-center gap-1 text-status-completed">
+                          <Check className="h-3.5 w-3.5" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent><p>Up to date documentation</p></TooltipContent>
+                    </Tooltip>
+                  )}
 
                   <div className="flex items-center ml-auto gap-0.5">
                     <Tooltip>
