@@ -54,6 +54,14 @@ const statusActionConfig: Record<JobStatus | "new", { label: string; icon: React
 
 const Index = () => {
   const navigate = useNavigate();
+  const [configModalOpen, setConfigModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; status: string } | null>(null);
+
+  const handleActionClick = (projectId: string, projectName: string, status: string) => {
+    if (status === "running" || status === "pending") return;
+    setSelectedProject({ id: projectId, name: projectName, status });
+    setConfigModalOpen(true);
+  };
 
   return (
     <Layout>
