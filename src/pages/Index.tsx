@@ -16,8 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Database,
-  Box,
+  Check,
+  GitCommitHorizontal,
   Github,
   HardDrive,
   Plus,

@@ -19,6 +19,7 @@ export interface Project {
   summary?: string;
   loc?: number;
   componentCount?: number;
+  commitsBehind?: number;
   latestJob?: Job;
   integrationSource: IntegrationSource;
   syncStatus?: SyncStatus;
