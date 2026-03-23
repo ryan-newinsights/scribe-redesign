@@ -274,6 +274,7 @@ export function ProjectCard({
         onOpenChange={setConfigModalOpen}
         projectName={project.name}
         llmConfigs={llmConfigs}
+        mode={status === 'new' || status === 'pending' ? 'new' : 'sync'}
         onSubmit={(config) => {
           if (status === 'new' || status === 'pending') {
             onStart?.(project.id, config);

@@ -155,6 +155,7 @@ const ProjectSummary = () => {
         onOpenChange={setConfigModalOpen}
         projectName={summary?.projectName || ""}
         llmConfigs={mockLLMConfigs}
+        mode="sync"
         onSubmit={handleGenerateWithConfig}
       />
     </Layout>
