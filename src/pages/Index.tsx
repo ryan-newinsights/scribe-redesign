@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +31,8 @@ import {
   Unplug,
   MoreHorizontal,
 } from "lucide-react";
-import { mockProjects } from "@/data/mockData";
+import { mockProjects, mockLLMConfigs } from "@/data/mockData";
+import { GenerationConfigModal } from "@/components/projects/GenerationConfigModal";
 import { cn } from "@/lib/utils";
 import type { JobStatus } from "@/types/project";
 
