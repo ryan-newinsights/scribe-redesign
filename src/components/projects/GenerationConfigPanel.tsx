@@ -90,9 +90,7 @@ export function GenerationConfigPanel({
           <div
             className={cn(
               "rounded-lg border p-3 transition-colors",
-              fullUpdate
-                ? "border-warning bg-warning-bg/50 dark:bg-warning-bg/30"
-                : "border-border bg-muted/50 dark:bg-muted/30"
+              "border-border bg-muted/50 dark:bg-muted/30"
             )}
           >
             <div className="flex items-start gap-3">
@@ -109,16 +107,13 @@ export function GenerationConfigPanel({
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   By default, only changed files are re-processed. Enable this to regenerate documentation for the entire codebase.
                 </p>
+                {fullUpdate && (
+                  <p className="text-xs text-muted-foreground leading-relaxed pt-1">
+                    The last full run was <span className="font-semibold text-foreground">25,384,215</span> tokens.
+                  </p>
+                )}
               </div>
             </div>
-            {fullUpdate && (
-              <div className="mt-3 flex items-start gap-2 rounded-md bg-warning-bg dark:bg-warning/10 p-2.5 border border-warning/20">
-                <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
-                <p className="text-xs text-warning dark:text-warning leading-relaxed">
-                  This will reprocess all files regardless of changes. This is expensive and may take a considerable amount of time for large repositories.
-                </p>
-              </div>
-            )}
           </div>
         </>
       )}
