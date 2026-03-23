@@ -163,6 +163,7 @@ const Index = () => {
                           className={cn("h-6 w-6", actionClassName)}
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleActionClick(project.id, project.name, status);
                           }}
                         >
                           <ActionIcon className="h-3 w-3" />
