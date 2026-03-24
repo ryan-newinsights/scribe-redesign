@@ -19,7 +19,7 @@ import {
 import { Download, RotateCw, ChevronDown } from "lucide-react";
 import { mockDocumentationSummaries } from "@/data/mockDocumentationData";
 import { mockTechOverviews } from "@/data/mockTechOverviewData";
-import { mockLLMConfigs } from "@/data/mockData";
+import { mockLLMConfigs, mockProjects } from "@/data/mockData";
 import { GenerationConfigModal } from "@/components/projects/GenerationConfigModal";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -46,6 +46,7 @@ const ProjectSummary = () => {
 
   const summary = projectId ? mockDocumentationSummaries[projectId] : null;
   const techOverview = projectId ? mockTechOverviews[projectId] : null;
+  const project = mockProjects.find(p => p.id === projectId);
 
   const handleExport = (type: string) => {
     toast({ title: `Exporting ${type}`, description: `Preparing download...` });
@@ -57,11 +58,11 @@ const ProjectSummary = () => {
 
   const handleGenerateWithConfig = (data: {
     llmConfigId: string;
-    overwrite: boolean;
+    fullUpdate: boolean;
   }) => {
     toast({
       title: "Regenerating Documentation",
-      description: `Starting regeneration with ${data.overwrite ? "overwrite" : "merge"} mode...`,
+      description: `Starting ${data.fullUpdate ? "full" : "incremental"} regeneration...`,
     });
     navigate(`/progress/${projectId}`);
   };
@@ -156,6 +157,7 @@ const ProjectSummary = () => {
         projectName={summary?.projectName || ""}
         llmConfigs={mockLLMConfigs}
         mode="sync"
+        lastRunTokens={project?.latestJob?.totalTokens}
         onSubmit={handleGenerateWithConfig}
       />
     </Layout>

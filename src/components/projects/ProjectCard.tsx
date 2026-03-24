@@ -33,11 +33,11 @@ import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
   project: Project;
-  onRerun: (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => void;
+  onRerun: (projectId: string, config?: { llmConfigId: string; fullUpdate: boolean }) => void;
   onViewProgress: (projectId: string) => void;
   onViewDocs: (projectId: string) => void;
   onTitleClick?: (projectId: string) => void;
-  onStart?: (projectId: string, config?: { llmConfigId: string; overwrite: boolean }) => void;
+  onStart?: (projectId: string, config?: { llmConfigId: string; fullUpdate: boolean }) => void;
   onUnlink?: (projectId: string) => void;
   onDelete?: (projectId: string) => void;
   onDownloadDocs?: (projectId: string) => void;
@@ -275,6 +275,7 @@ export function ProjectCard({
         projectName={project.name}
         llmConfigs={llmConfigs}
         mode={status === 'new' || status === 'pending' ? 'new' : 'sync'}
+        lastRunTokens={project.latestJob?.totalTokens}
         onSubmit={(config) => {
           if (status === 'new' || status === 'pending') {
             onStart?.(project.id, config);

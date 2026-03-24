@@ -6,6 +6,7 @@ export interface LLMConfiguration {
   modelKey: string;
   icon: "sparkles" | "cloud";
   dateAdded: string;
+  isDefault?: boolean;
 }
 
 export const mockLLMConfigurations: LLMConfiguration[] = [
@@ -17,6 +18,7 @@ export const mockLLMConfigurations: LLMConfiguration[] = [
     modelKey: "gemini-3.1-pro-preview",
     icon: "sparkles",
     dateAdded: "3/1/2026",
+    isDefault: true,
   },
   {
     id: "2",

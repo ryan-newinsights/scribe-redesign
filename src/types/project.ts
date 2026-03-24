@@ -10,6 +10,7 @@ export interface Job {
   progress: number;
   createdAt: Date;
   errorMessage?: string;
+  totalTokens?: number;
 }
 
 export interface Project {
@@ -30,6 +31,7 @@ export interface LLMConfig {
   name: string;
   provider: string;
   modelName: string;
+  isDefault?: boolean;
 }
 
 export interface RecentDocument {

@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Check,
+  Code,
   GitCommitHorizontal,
   Github,
   HardDrive,
@@ -55,11 +56,11 @@ const statusActionConfig: Record<JobStatus | "new", { label: string; icon: React
 const Index = () => {
   const navigate = useNavigate();
   const [configModalOpen, setConfigModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; status: string } | null>(null);
+  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; status: JobStatus | "new"; lastRunTokens?: number } | null>(null);
 
-  const handleActionClick = (projectId: string, projectName: string, status: string) => {
+  const handleActionClick = (projectId: string, projectName: string, status: JobStatus | "new", lastRunTokens?: number) => {
     if (status === "running" || status === "pending") return;
-    setSelectedProject({ id: projectId, name: projectName, status });
+    setSelectedProject({ id: projectId, name: projectName, status, lastRunTokens });
     setConfigModalOpen(true);
   };
 
@@ -130,7 +131,7 @@ const Index = () => {
                     </Tooltip>
                   )}
                   <span className="flex items-center gap-1">
-                    <span className="text-xs font-mono">&lt;/&gt;</span>
+                    <Code className="h-3.5 w-3.5" />
                     {project.loc?.toLocaleString() || "—"}
                   </span>
                   {project.commitsBehind != null && project.commitsBehind > 0 ? (
@@ -163,7 +164,7 @@ const Index = () => {
                           className={cn("h-6 w-6", actionClassName)}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleActionClick(project.id, project.name, status);
+                            handleActionClick(project.id, project.name, status, project.latestJob?.totalTokens);
                           }}
                         >
                           <ActionIcon className="h-3 w-3" />
@@ -242,9 +243,12 @@ const Index = () => {
         projectName={selectedProject?.name || ""}
         llmConfigs={mockLLMConfigs}
         mode={selectedProject?.status === "new" || selectedProject?.status === "pending" ? "new" : "sync"}
+        lastRunTokens={selectedProject?.lastRunTokens}
         onSubmit={(config) => {
           console.log("Config submitted:", selectedProject?.id, config);
-          setConfigModalOpen(false);
+          if (selectedProject) {
+            navigate(`/progress/${selectedProject.id}`);
+          }
         }}
       />
     </Layout>

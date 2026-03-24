@@ -10,36 +10,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Play, AlertTriangle } from "lucide-react";
+import { Play } from "lucide-react";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 interface GenerationConfigPanelProps {
   repoName: string;
-  source: "github" | "local";
   mode?: "new" | "sync";
   llmConfigs: LLMConfig[];
-  onBack: () => void;
-  onSubmit: (data: { llmConfigId: string; overwrite: boolean; fullUpdate: boolean }) => void;
+  lastRunTokens?: number;
+  onSubmit: (data: { llmConfigId: string; fullUpdate: boolean }) => void;
   onCancel: () => void;
 }
 
 export function GenerationConfigPanel({
   repoName,
-  source,
   mode = "new",
   llmConfigs,
-  onBack,
+  lastRunTokens,
   onSubmit,
   onCancel,
 }: GenerationConfigPanelProps) {
-  const [llmConfigId, setLlmConfigId] = useState(llmConfigs[0]?.id || "");
-  const [overwrite, setOverwrite] = useState(false);
+  const [llmConfigId, setLlmConfigId] = useState(
+    llmConfigs.find(c => c.isDefault)?.id || llmConfigs[0]?.id || ""
+  );
   const [fullUpdate, setFullUpdate] = useState(false);
 
   const handleSubmit = () => {
-    onSubmit({ llmConfigId, overwrite, fullUpdate });
+    onSubmit({ llmConfigId, fullUpdate });
   };
 
   const isSync = mode === "sync";
@@ -67,7 +66,7 @@ export function GenerationConfigPanel({
           LLM Configuration
         </Label>
         <Select value={llmConfigId} onValueChange={setLlmConfigId}>
-          <SelectTrigger className="bg-background border-input">
+          <SelectTrigger className="bg-background border-accent focus:ring-accent">
             <SelectValue placeholder="Select LLM" />
           </SelectTrigger>
           <SelectContent>
@@ -97,7 +96,7 @@ export function GenerationConfigPanel({
               <Checkbox
                 id="full-update"
                 checked={fullUpdate}
-                onCheckedChange={(checked) => setFullUpdate(checked as boolean)}
+                onCheckedChange={(checked) => setFullUpdate(checked === true)}
                 className="mt-0.5"
               />
               <div className="space-y-1">
@@ -107,9 +106,9 @@ export function GenerationConfigPanel({
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   By default, only changed files are re-processed. Enable this to regenerate documentation for the entire codebase.
                 </p>
-                {fullUpdate && (
+                {fullUpdate && lastRunTokens != null && (
                   <p className="text-xs text-muted-foreground leading-relaxed pt-1">
-                    The last full update was <span className="font-semibold text-foreground">25,384,215</span> tokens.
+                    The last full update was <span className="font-semibold text-accent">{lastRunTokens.toLocaleString()}</span> tokens.
                   </p>
                 )}
               </div>

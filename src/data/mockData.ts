@@ -1,7 +1,7 @@
 import { Project, LLMConfig, RecentDocument } from "@/types/project";
 
 export const mockLLMConfigs: LLMConfig[] = [
-  { id: "1", name: "GPT-4 Turbo", provider: "OpenAI", modelName: "gpt-4-turbo" },
+  { id: "1", name: "GPT-4 Turbo", provider: "OpenAI", modelName: "gpt-4-turbo", isDefault: true },
   { id: "2", name: "Claude 3 Opus", provider: "Anthropic", modelName: "claude-3-opus" },
   { id: "3", name: "Gemini Pro", provider: "Google", modelName: "gemini-pro" },
 ];
@@ -21,6 +21,7 @@ export const mockProjects: Project[] = [
       status: "completed",
       progress: 100,
       createdAt: new Date("2025-12-18T10:30:00"),
+      totalTokens: 18_742_103,
     },
   },
   {
@@ -88,6 +89,7 @@ export const mockProjects: Project[] = [
       status: "completed",
       progress: 100,
       createdAt: new Date("2025-12-15T16:45:00"),
+      totalTokens: 25_384_215,
     },
   },
   {

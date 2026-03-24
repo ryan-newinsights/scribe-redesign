@@ -11,7 +11,8 @@ interface GenerationConfigModalProps {
   projectName: string;
   llmConfigs: LLMConfig[];
   mode?: "new" | "sync";
-  onSubmit: (data: { llmConfigId: string; overwrite: boolean; fullUpdate: boolean }) => void;
+  lastRunTokens?: number;
+  onSubmit: (data: { llmConfigId: string; fullUpdate: boolean }) => void;
 }
 
 export function GenerationConfigModal({
@@ -20,9 +21,10 @@ export function GenerationConfigModal({
   projectName,
   llmConfigs,
   mode = "new",
+  lastRunTokens,
   onSubmit,
 }: GenerationConfigModalProps) {
-  const handleSubmit = (data: { llmConfigId: string; overwrite: boolean; fullUpdate: boolean }) => {
+  const handleSubmit = (data: { llmConfigId: string; fullUpdate: boolean }) => {
     onSubmit(data);
     onOpenChange(false);
   };
@@ -32,10 +34,9 @@ export function GenerationConfigModal({
       <DialogContent className="max-w-md p-6">
         <GenerationConfigPanel
           repoName={projectName}
-          source="local"
           mode={mode}
           llmConfigs={llmConfigs}
-          onBack={() => onOpenChange(false)}
+          lastRunTokens={lastRunTokens}
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
         />
