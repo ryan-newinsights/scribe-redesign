@@ -15,10 +15,9 @@ const viewModes: { id: ViewMode; label: string; description: string }[] = [
   { id: "combined", label: "Interactive", description: "Charts + timeline linked" },
 ];
 
-type AnchorId = "filters" | "timeline" | "analytics" | "interactive";
+type AnchorId = "timeline" | "analytics" | "interactive";
 
 const anchors: { id: AnchorId; label: string }[] = [
-  { id: "filters", label: "Filters" },
   { id: "timeline", label: "Timeline" },
   { id: "analytics", label: "Analytics" },
   { id: "interactive", label: "Interactive" },
