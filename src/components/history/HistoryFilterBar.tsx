@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, SlidersHorizontal, LayoutGrid, X, Plus } from "lucide-react";
+import { Search, ListFilter, Group, X, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
@@ -82,7 +82,7 @@ export const HistoryFilterIcons = ({
 
   return (
     <div className="space-y-1.5">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         {/* Search toggle */}
         <button
           onClick={() => {
@@ -90,13 +90,13 @@ export const HistoryFilterIcons = ({
             if (searchActive) onSearchChange("");
           }}
           className={cn(
-            "h-7 w-7 rounded-md flex items-center justify-center transition-colors",
+            "h-9 w-9 rounded-lg flex items-center justify-center transition-colors border",
             searchActive || searchQuery
-              ? "bg-accent text-accent-foreground"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              ? "bg-accent text-accent-foreground border-accent"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted border-border"
           )}
         >
-          <Search className="h-3.5 w-3.5" />
+          <Search className="h-4 w-4" />
         </button>
 
         {/* Filter toggle */}
@@ -104,15 +104,15 @@ export const HistoryFilterIcons = ({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "h-7 w-7 rounded-md flex items-center justify-center transition-colors relative",
+                "h-9 w-9 rounded-lg flex items-center justify-center transition-colors relative border",
                 filters.length > 0
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-accent text-accent-foreground border-accent"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted border-border"
               )}
             >
-              <SlidersHorizontal className="h-3.5 w-3.5" />
+              <ListFilter className="h-4 w-4" />
               {filters.length > 0 && (
-                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">
                   {filters.length}
                 </span>
               )}
@@ -164,13 +164,13 @@ export const HistoryFilterIcons = ({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "h-7 w-7 rounded-md flex items-center justify-center transition-colors",
+                "h-9 w-9 rounded-lg flex items-center justify-center transition-colors border",
                 groupBy !== "none"
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-accent text-accent-foreground border-accent"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted border-border"
               )}
             >
-              <LayoutGrid className="h-3.5 w-3.5" />
+              <Group className="h-4 w-4" />
             </button>
           </PopoverTrigger>
           <PopoverContent align="start" side="right" className="w-48 p-3">
