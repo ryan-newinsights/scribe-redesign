@@ -170,7 +170,7 @@ export const HistoryFilterIcons = ({
                   : "text-muted-foreground hover:text-foreground hover:bg-muted border-border"
               )}
             >
-              <Group className="h-4 w-4" />
+              <Boxes className="h-4 w-4" />
             </button>
           </PopoverTrigger>
           <PopoverContent align="start" side="right" className="w-48 p-3">
