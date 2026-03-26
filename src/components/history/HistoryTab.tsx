@@ -28,7 +28,7 @@ export const HistoryTab = () => {
   const [filters, setFilters] = useState<HistoryFilter[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState<GroupBy>("none");
-  const [activeAnchor, setActiveAnchor] = useState<AnchorId>("filters");
+  const [activeAnchor, setActiveAnchor] = useState<AnchorId>("timeline");
 
   // Spyscroll observer
   useEffect(() => {
