@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, ListFilter, Group, X, Plus } from "lucide-react";
+import { Search, ListFilter, Boxes, X, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
@@ -170,7 +170,7 @@ export const HistoryFilterIcons = ({
                   : "text-muted-foreground hover:text-foreground hover:bg-muted border-border"
               )}
             >
-              <Group className="h-4 w-4" />
+              <Boxes className="h-4 w-4" />
             </button>
           </PopoverTrigger>
           <PopoverContent align="start" side="right" className="w-48 p-3">
