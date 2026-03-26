@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { HistoryFilterBar, type HistoryFilter, type GroupBy } from "./HistoryFilterBar";
+import { HistoryFilterBar, HistoryFilterIcons, type HistoryFilter, type GroupBy } from "./HistoryFilterBar";
 import { TimelineTextView } from "./TimelineTextView";
 import { GraphRichView } from "./GraphRichView";
 import { CombinedView } from "./CombinedView";
@@ -96,21 +96,31 @@ export const HistoryTab = () => {
     <div className="flex gap-10">
       {/* Spyscroll anchor nav */}
       <nav className="hidden lg:block w-40 shrink-0 sticky top-0 self-start max-h-[calc(100vh-120px)] overflow-y-auto">
-        <div className="pt-2 space-y-0.5">
-          {anchors.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className={cn(
-                "block w-full text-left text-[13px] py-1 px-2 rounded-sm transition-colors",
-                activeAnchor === id
-                  ? "text-foreground font-medium"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="pt-2 space-y-3">
+          <HistoryFilterIcons
+            filters={filters}
+            onFiltersChange={setFilters}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            groupBy={groupBy}
+            onGroupByChange={setGroupBy}
+          />
+          <div className="space-y-0.5">
+            {anchors.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={cn(
+                  "block w-full text-left text-[13px] py-1 px-2 rounded-sm transition-colors",
+                  activeAnchor === id
+                    ? "text-foreground font-medium"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -123,8 +133,6 @@ export const HistoryTab = () => {
             onFiltersChange={setFilters}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
-            groupBy={groupBy}
-            onGroupByChange={setGroupBy}
             resultCount={filteredSnapshots.length}
             totalCount={mockSnapshots.length}
           />
