@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, SlidersHorizontal, LayoutGrid, X, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -204,25 +205,17 @@ export const HistoryFilterIcons = ({
         </Popover>
       </div>
 
-      {/* Search input below icons */}
+      {/* Search input below icons — matches Code Docs pattern */}
       {searchActive && (
         <div className="relative">
-          <input
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
             ref={searchRef}
-            type="text"
+            placeholder="Search snapshots..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search..."
-            className="w-full h-7 pl-2 pr-6 text-xs rounded-md border border-accent bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+            className="h-7 pl-7 text-xs bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-ring"
           />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange("")}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          )}
         </div>
       )}
     </div>
