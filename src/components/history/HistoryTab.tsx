@@ -15,10 +15,9 @@ const viewModes: { id: ViewMode; label: string; description: string }[] = [
   { id: "combined", label: "Interactive", description: "Charts + timeline linked" },
 ];
 
-type AnchorId = "filters" | "timeline" | "analytics" | "interactive";
+type AnchorId = "timeline" | "analytics" | "interactive";
 
 const anchors: { id: AnchorId; label: string }[] = [
-  { id: "filters", label: "Filters" },
   { id: "timeline", label: "Timeline" },
   { id: "analytics", label: "Analytics" },
   { id: "interactive", label: "Interactive" },
@@ -29,7 +28,7 @@ export const HistoryTab = () => {
   const [filters, setFilters] = useState<HistoryFilter[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState<GroupBy>("none");
-  const [activeAnchor, setActiveAnchor] = useState<AnchorId>("filters");
+  const [activeAnchor, setActiveAnchor] = useState<AnchorId>("timeline");
 
   // Spyscroll observer
   useEffect(() => {
@@ -117,8 +116,8 @@ export const HistoryTab = () => {
 
       {/* Main content */}
       <div className="flex-1 min-w-0 space-y-8">
-        {/* Filters section */}
-        <section id="filters">
+        {/* Timeline view */}
+        <section id="timeline">
           <HistoryFilterBar
             filters={filters}
             onFiltersChange={setFilters}
@@ -129,11 +128,7 @@ export const HistoryTab = () => {
             resultCount={filteredSnapshots.length}
             totalCount={mockSnapshots.length}
           />
-        </section>
-
-        {/* Timeline view */}
-        <section id="timeline">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-3 mt-4">
             <h3 className="text-sm font-semibold">Timeline</h3>
             <Badge variant="secondary" className="text-[10px]">{filteredSnapshots.length} snapshots</Badge>
           </div>
