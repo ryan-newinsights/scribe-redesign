@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, ListFilter, Group, X, Plus } from "lucide-react";
+import { Search, ListFilter, Boxes, X, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
