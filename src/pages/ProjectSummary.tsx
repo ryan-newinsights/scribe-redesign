@@ -27,14 +27,16 @@ import { OverviewTab } from "@/components/project/OverviewTab";
 import { TechOverviewTab } from "@/components/project/TechOverviewTab";
 import { CodeDocsTab } from "@/components/project/CodeDocsTab";
 import { DiagramsTab } from "@/components/diagrams";
+import { HistoryTab } from "@/components/history";
 
-type TabId = "overview" | "tech-overview" | "code-docs" | "diagrams";
+type TabId = "overview" | "tech-overview" | "code-docs" | "diagrams" | "history";
 
 const tabs: { id: TabId; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "tech-overview", label: "Tech Overview" },
   { id: "code-docs", label: "Code Docs" },
   { id: "diagrams", label: "Diagrams" },
+  { id: "history", label: "History" },
 ];
 
 const ProjectSummary = () => {
@@ -149,6 +151,7 @@ const ProjectSummary = () => {
       {activeTab === "tech-overview" && <TechOverviewTab data={techOverview} />}
       {activeTab === "code-docs" && <CodeDocsTab projectId={projectId!} />}
       {activeTab === "diagrams" && <DiagramsTab />}
+      {activeTab === "history" && <HistoryTab />}
 
       <GenerationConfigModal
         open={configModalOpen}
