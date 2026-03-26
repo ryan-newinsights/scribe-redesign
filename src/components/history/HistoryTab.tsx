@@ -95,23 +95,25 @@ export const HistoryTab = () => {
   return (
     <div className="flex gap-10">
       {/* Spyscroll anchor nav */}
-      <nav className="hidden lg:block w-40 shrink-0 sticky top-0 self-start max-h-[calc(100vh-120px)] overflow-y-auto">
-        <div className="pt-2 space-y-3">
-          <HistoryFilterIcons
-            filters={filters}
-            onFiltersChange={setFilters}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            groupBy={groupBy}
-            onGroupByChange={setGroupBy}
-          />
+      <nav className="hidden lg:block w-56 shrink-0 sticky top-0 self-start max-h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="pt-2">
+          <div className="mb-2">
+            <HistoryFilterIcons
+              filters={filters}
+              onFiltersChange={setFilters}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              groupBy={groupBy}
+              onGroupByChange={setGroupBy}
+            />
+          </div>
           <div className="space-y-0.5">
             {anchors.map(({ id, label }) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
                 className={cn(
-                  "block w-full text-left text-[13px] py-1 px-2 rounded-sm transition-colors",
+                  "block w-full text-left text-[12px] py-0.5 px-1 rounded-sm transition-colors",
                   activeAnchor === id
                     ? "text-foreground font-medium"
                     : "text-muted-foreground hover:text-foreground"
