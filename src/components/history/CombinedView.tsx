@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Flag, GitCommit, FileText, Box, LayoutDashboard, TrendingUp, TrendingDown } from "lucide-react";
+import { Flag, GitCommit, FileText, Box, LayoutDashboard, TrendingUp, TrendingDown, GitPullRequest } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import type { HistorySnapshot, ISOCharacteristic } from "@/data/mockHistoryData";
@@ -250,6 +250,32 @@ export const CombinedView = ({ snapshots }: CombinedViewProps) => {
                         );
                       })}
                     </div>
+
+                    {/* Releases */}
+                    {snap.releases && snap.releases.length > 0 && (
+                      <div className="space-y-2 pt-2">
+                        {snap.releases.map((rel, ri) => {
+                          const relColors = isoColorMap[rel.isoPrimary];
+                          return (
+                            <div key={ri} className="flex items-start gap-2 pl-1">
+                              <div className={cn("mt-1.5 h-1.5 w-1.5 rounded-full shrink-0", relColors.dot)} />
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="text-xs font-medium text-foreground">{rel.name}</span>
+                                  {rel.prRefs.length > 0 && (
+                                    <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                                      <GitPullRequest className="h-2.5 w-2.5" />
+                                      {rel.prRefs.join(", ")}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-muted-foreground leading-relaxed">{rel.summary}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
