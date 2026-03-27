@@ -8,6 +8,13 @@ export type ISOCharacteristic =
 
 export type ChangeScope = "contained" | "cross-cutting" | "structural";
 
+export interface Release {
+  name: string;
+  summary: string;
+  prRefs: string[];
+  isoPrimary: ISOCharacteristic;
+}
+
 export interface HistorySnapshot {
   id: string;
   commitSha: string;
@@ -25,10 +32,11 @@ export interface HistorySnapshot {
   diagramsInvalidated: number;
   functionsAdded: number;
   functionsRemoved: number;
+  releases?: Release[];
 }
 
 export interface WeeklySummary {
-  weekStart: string; // YYYY-MM-DD
+  weekStart: string;
   headline: string;
   businessImpact: string;
   isoPrimary: ISOCharacteristic;
@@ -44,7 +52,7 @@ export interface WeeklySummary {
   snapshots: HistorySnapshot[];
 }
 
-// ISO 25010 color mapping — keys match CSS tokens
+// ISO 25010 color mapping
 export const isoColorMap: Record<ISOCharacteristic, { bg: string; text: string; dot: string }> = {
   "Functional Suitability": { bg: "bg-blue-100 dark:bg-blue-950/40", text: "text-blue-700 dark:text-blue-400", dot: "bg-blue-500" },
   "Reliability":            { bg: "bg-yellow-100 dark:bg-yellow-950/40", text: "text-yellow-700 dark:text-yellow-400", dot: "bg-yellow-500" },
@@ -78,6 +86,26 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 3,
     functionsAdded: 18,
     functionsRemoved: 6,
+    releases: [
+      {
+        name: "PM-1: Extract Payment Validation",
+        summary: "Shared validation layer extracted from PaymentProcessor into standalone service with schema-driven rules.",
+        prRefs: ["#187", "#189"],
+        isoPrimary: "Maintainability",
+      },
+      {
+        name: "PM-2: Order Decoupling",
+        summary: "Order processing now communicates with payment via event bus instead of direct imports, eliminating 8 circular dependencies.",
+        prRefs: ["#191"],
+        isoPrimary: "Maintainability",
+      },
+      {
+        name: "PM-3: Refund Sub-service",
+        summary: "Refund logic split into dedicated sub-service with its own retry queue and idempotency guarantees.",
+        prRefs: ["#193", "#194"],
+        isoPrimary: "Functional Suitability",
+      },
+    ],
   },
   {
     id: "snap-002",
@@ -94,6 +122,20 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 0,
     functionsAdded: 4,
     functionsRemoved: 1,
+    releases: [
+      {
+        name: "AUTH-1: Circuit Breaker",
+        summary: "Added circuit breaker around token refresh endpoint with configurable failure threshold (5 failures / 60s window).",
+        prRefs: ["#183"],
+        isoPrimary: "Reliability",
+      },
+      {
+        name: "AUTH-2: Token Rotation",
+        summary: "Refresh tokens now rotate on each use with grace period overlap to prevent race conditions in concurrent requests.",
+        prRefs: ["#184", "#185"],
+        isoPrimary: "Security",
+      },
+    ],
   },
   {
     id: "snap-003",
@@ -112,6 +154,26 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 4,
     functionsAdded: 42,
     functionsRemoved: 0,
+    releases: [
+      {
+        name: "RPT-1: Reporting Engine Core",
+        summary: "Plugin-based reporting engine with adapter registry, supporting synchronous and streaming output modes.",
+        prRefs: ["#170", "#171", "#172"],
+        isoPrimary: "Functional Suitability",
+      },
+      {
+        name: "RPT-2: CSV & PDF Adapters",
+        summary: "CSV adapter with configurable delimiters and encoding; PDF adapter using headless Chrome for pixel-perfect rendering.",
+        prRefs: ["#174"],
+        isoPrimary: "Functional Suitability",
+      },
+      {
+        name: "RPT-3: XBRL Compliance Adapter",
+        summary: "XBRL output adapter with inline validation against SEC taxonomy, required for Q1 regulatory filing.",
+        prRefs: ["#176", "#177"],
+        isoPrimary: "Compatibility",
+      },
+    ],
   },
   {
     id: "snap-004",
@@ -122,12 +184,20 @@ export const mockSnapshots: HistorySnapshot[] = [
     isoAffected: ["Performance Efficiency"],
     changeScope: "contained",
     changeSummary: "Database query optimization for dashboard aggregation endpoints.",
-    changeRationale: "Query performance improvements — N+1 queries eliminated in dashboard data loading, reducing p95 latency.",
+    changeRationale: "Query performance improvements — N+1 queries eliminated in dashboard data loading, reducing p95 latency by 73%.",
     filesChanged: 7,
     componentsAffected: 4,
     diagramsInvalidated: 0,
     functionsAdded: 2,
     functionsRemoved: 3,
+    releases: [
+      {
+        name: "PERF-1: Batch Aggregation Queries",
+        summary: "Replaced 12 sequential dashboard queries with 2 materialized view lookups, cutting p95 from 1.2s to 320ms.",
+        prRefs: ["#165"],
+        isoPrimary: "Performance Efficiency",
+      },
+    ],
   },
   {
     id: "snap-005",
@@ -144,6 +214,20 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 1,
     functionsAdded: 8,
     functionsRemoved: 2,
+    releases: [
+      {
+        name: "OBS-1: Structured Logging",
+        summary: "JSON-structured logging with correlation IDs, replacing ad-hoc print statements across all API handlers.",
+        prRefs: ["#158", "#159"],
+        isoPrimary: "Reliability",
+      },
+      {
+        name: "OBS-2: Error Boundary Middleware",
+        summary: "Global error boundary catches unhandled exceptions, logs stack traces with request context, and returns sanitized 5xx responses.",
+        prRefs: ["#161"],
+        isoPrimary: "Security",
+      },
+    ],
   },
   {
     id: "snap-006",
@@ -162,6 +246,32 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 5,
     functionsAdded: 35,
     functionsRemoved: 12,
+    releases: [
+      {
+        name: "API-1: v2 Authentication Contract",
+        summary: "New JWT-based auth with scoped permissions replacing API key auth; includes 90-day migration window with dual-support.",
+        prRefs: ["#140", "#141", "#143"],
+        isoPrimary: "Security",
+      },
+      {
+        name: "API-2: Resource Schema Migration",
+        summary: "All resource endpoints now use envelope response format with pagination cursors and HATEOAS links.",
+        prRefs: ["#145", "#146"],
+        isoPrimary: "Compatibility",
+      },
+      {
+        name: "API-3: Deprecation Headers",
+        summary: "v1 endpoints return Sunset and Deprecation headers per RFC 8594; client SDKs emit warnings on v1 usage.",
+        prRefs: ["#148"],
+        isoPrimary: "Compatibility",
+      },
+      {
+        name: "API-4: OpenAPI 3.1 Spec",
+        summary: "Auto-generated OpenAPI 3.1 specification with examples, published to developer portal with interactive playground.",
+        prRefs: ["#150"],
+        isoPrimary: "Functional Suitability",
+      },
+    ],
   },
   {
     id: "snap-007",
@@ -172,7 +282,7 @@ export const mockSnapshots: HistorySnapshot[] = [
     isoAffected: ["Maintainability"],
     changeScope: "contained",
     changeSummary: "Test coverage expansion for user management module.",
-    changeRationale: "Testability improvement — 24 new unit tests added for user CRUD operations.",
+    changeRationale: "Testability improvement — 24 new unit tests added for user CRUD operations, raising coverage from 34% to 89%.",
     filesChanged: 8,
     componentsAffected: 2,
     diagramsInvalidated: 0,
@@ -194,22 +304,62 @@ export const mockSnapshots: HistorySnapshot[] = [
     diagramsInvalidated: 0,
     functionsAdded: 6,
     functionsRemoved: 8,
+    releases: [
+      {
+        name: "SEC-1: Validation Middleware",
+        summary: "Zod-based request validation middleware with automatic 422 responses and structured error details for invalid payloads.",
+        prRefs: ["#130", "#131"],
+        isoPrimary: "Security",
+      },
+      {
+        name: "SEC-2: SQL Injection Prevention",
+        summary: "Parameterized query enforcement via ESLint rule; 3 legacy string-interpolated queries discovered and fixed.",
+        prRefs: ["#133"],
+        isoPrimary: "Security",
+      },
+    ],
   },
   {
     id: "snap-009",
     commitSha: "c7d8e9f",
     committedAt: new Date("2026-03-04T09:30:00Z"),
     createdAt: new Date("2026-03-04T09:35:00Z"),
-    isoPrimary: "Functional Suitability",
-    isoAffected: ["Functional Suitability", "Maintainability"],
-    changeScope: "contained",
-    changeSummary: "Webhook handler refactored to support configurable event routing.",
-    changeRationale: "Business logic enhancement — webhook events now routed through configurable handler registry.",
-    filesChanged: 6,
-    componentsAffected: 3,
+    isoPrimary: "Performance Efficiency",
+    isoAffected: ["Performance Efficiency", "Reliability"],
+    changeScope: "cross-cutting",
+    changeSummary: "Documentation processing now runs 5x faster with parallel execution and async networking.",
+    changeRationale: "Large codebases that previously took 20+ minutes to document now complete in under 4. This removes the primary friction point reported by trial users and unblocks enterprise evaluations with 500+ component repositories.",
+    filesChanged: 34,
+    componentsAffected: 12,
     diagramsInvalidated: 1,
-    functionsAdded: 5,
-    functionsRemoved: 2,
+    functionsAdded: 15,
+    functionsRemoved: 7,
+    releases: [
+      {
+        name: "EA-1: Parallel Component Processing",
+        summary: "Components within a batch now process concurrently via ThreadPoolExecutor with configurable per-org worker pools (default: 40).",
+        prRefs: ["#141", "#142"],
+        isoPrimary: "Performance Efficiency",
+      },
+      {
+        name: "EA-1b: Fix Batch Formation",
+        summary: "Replaced WCC-based batching with fixed-size chunking; raised worker cap from 10 to 40 and corrected Vertex AI output TPM from 40K to 1.6M.",
+        prRefs: ["#152"],
+        isoPrimary: "Reliability",
+      },
+      {
+        name: "EA-2: Async LLM Client",
+        summary: "Replaced synchronous HTTP with httpx connection pooling, Gemini batch prediction, and exponential backoff retry on transient errors.",
+        prRefs: ["#151"],
+        isoPrimary: "Performance Efficiency",
+      },
+      {
+        name: "EA-5: PostgreSQL Migration",
+        summary: "Production database migrated from SQLite to PostgreSQL with connection pooling, enabling concurrent workers and atomic job claiming.",
+        prRefs: [],
+        isoPrimary: "Reliability",
+      },
+    ],
   },
   {
     id: "snap-010",
@@ -222,12 +372,32 @@ export const mockSnapshots: HistorySnapshot[] = [
     isoAffected: ["Reliability", "Performance Efficiency"],
     changeScope: "cross-cutting",
     changeSummary: "Connection pooling and graceful shutdown implemented across all database consumers.",
-    changeRationale: "Reliability and performance improvement — database connections now managed through shared pool with proper lifecycle management.",
+    changeRationale: "Reliability and performance improvement — database connections now managed through shared pool with proper lifecycle management, eliminating connection leak under load.",
     filesChanged: 13,
     componentsAffected: 9,
     diagramsInvalidated: 2,
     functionsAdded: 7,
     functionsRemoved: 4,
+    releases: [
+      {
+        name: "DB-1: Connection Pool Manager",
+        summary: "Centralized connection pool with health checks, max-lifetime eviction, and per-tenant isolation for multi-org deployments.",
+        prRefs: ["#120", "#121"],
+        isoPrimary: "Reliability",
+      },
+      {
+        name: "DB-2: Graceful Shutdown",
+        summary: "SIGTERM handler drains active queries with 30s timeout before closing pool; prevents data corruption during rolling deploys.",
+        prRefs: ["#123"],
+        isoPrimary: "Reliability",
+      },
+      {
+        name: "DB-3: Connection Leak Detection",
+        summary: "Leaked connection detector logs stack trace of acquisition site when connections aren't returned within 60s.",
+        prRefs: ["#125"],
+        isoPrimary: "Performance Efficiency",
+      },
+    ],
   },
 ];
 
