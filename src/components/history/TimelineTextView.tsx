@@ -1,4 +1,4 @@
-import { Flag, GitCommit, FileText, Box, LayoutDashboard } from "lucide-react";
+import { Flag, GitCommit, FileText, Box, LayoutDashboard, GitPullRequest } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { HistorySnapshot } from "@/data/mockHistoryData";
