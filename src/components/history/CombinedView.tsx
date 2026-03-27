@@ -275,7 +275,7 @@ export const CombinedView = ({ snapshots }: CombinedViewProps) => {
                           );
                         })}
                       </div>
-                    )
+                    )}
                   </div>
                 )}
               </div>
