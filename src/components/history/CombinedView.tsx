@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Flag, GitCommit, FileText, Box, LayoutDashboard, TrendingUp, TrendingDown } from "lucide-react";
+import { Flag, GitCommit, FileText, Box, LayoutDashboard, TrendingUp, TrendingDown, GitPullRequest } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import type { HistorySnapshot, ISOCharacteristic } from "@/data/mockHistoryData";
